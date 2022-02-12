@@ -134,4 +134,6 @@ public class UseWeapon : MonoBehaviour
         }
         else { noAmmoText.SetActive(false); }
     }
+
+
 }
