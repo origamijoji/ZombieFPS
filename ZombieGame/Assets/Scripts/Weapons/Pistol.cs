@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Pistol : Weapon {
     public Pistol() {
-        weaponName = "Pistol";
-        reserveAmmo = 42;
-        maxReserveAmmo = 42;
-        currentMag = 7;
-        maxMag = 7;
-        drawTime = 0.6f;
-        bulletDamage = 25;
-        reloadSpeed = 1f;
-        firingRate = 0.25f;
+        WeaponName = "Pistol";
+        BulletHoleSize = "Small";
+        ReserveAmmo = 42;
+        MaxReserveAmmo = 42;
+        CurrentMag = 7;
+        MaxMag = 7;
+        DrawTime = 0.6f;
+        BulletDamage = 25;
+        ReloadSpeed = 1f;
+        FiringRate = 0.25f;
+        PointValue = 8;
     }
 }

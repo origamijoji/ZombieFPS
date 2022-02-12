@@ -19,6 +19,7 @@ public class UseWeapon : MonoBehaviour
     private MouseLook mouseLook;
     private Camera playerCamera;
     private PoolManager poolManager;
+    private Points playerPoints;
 
     public float firingTime;
 
@@ -32,6 +33,7 @@ public class UseWeapon : MonoBehaviour
         mouseLook = gameObject.GetComponent<MouseLook>();
         playerCamera = mouseLook.playerCamera;
         poolManager = PoolManager.instance;
+        playerPoints = gameObject.GetComponent<Points>();
     }
 
     private void Start() {
@@ -50,18 +52,18 @@ public class UseWeapon : MonoBehaviour
     }
 
     private void ShowInspector() {
-        equippedI = currentWeapon.weaponName;
-        primaryI = primaryWeapon.weaponName;
-        secondaryI = secondaryWeapon.weaponName;
-        currentMagazineI = currentWeapon.currentMag;
-        reserveAmmoI = currentWeapon.reserveAmmo;
+        equippedI = currentWeapon.WeaponName;
+        primaryI = primaryWeapon.WeaponName;
+        secondaryI = secondaryWeapon.WeaponName;
+        currentMagazineI = currentWeapon.CurrentMag;
+        reserveAmmoI = currentWeapon.ReserveAmmo;
     }
     private void ProcessReload() {
-        if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentWeapon.reserveAmmo > 0 && currentWeapon.currentMag != currentWeapon.maxMag) {
+        if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentWeapon.ReserveAmmo > 0 && currentWeapon.CurrentMag != currentWeapon.MaxMag) {
             isReloading = true;
             StartCoroutine(Reload());
         }
-        else if (currentWeapon.currentMag == 0 && !isReloading && currentWeapon.reserveAmmo > 0) {
+        else if (currentWeapon.CurrentMag == 0 && !isReloading && currentWeapon.ReserveAmmo > 0) {
             isReloading = true;
             StartCoroutine(Reload());
         }
@@ -70,16 +72,16 @@ public class UseWeapon : MonoBehaviour
 
     IEnumerator Reload() {
         while(isReloading) {
-            yield return new WaitForSeconds(currentWeapon.reloadSpeed);
-            int ammoRequired = currentWeapon.maxMag - currentWeapon.currentMag;
-            if(currentWeapon.reserveAmmo > ammoRequired) {
-                currentWeapon.currentMag = currentWeapon.maxMag;
-                currentWeapon.reserveAmmo -= ammoRequired;
+            yield return new WaitForSeconds(currentWeapon.ReloadSpeed);
+            int ammoRequired = currentWeapon.MaxMag - currentWeapon.CurrentMag;
+            if(currentWeapon.ReserveAmmo > ammoRequired) {
+                currentWeapon.CurrentMag = currentWeapon.MaxMag;
+                currentWeapon.ReserveAmmo -= ammoRequired;
                 isReloading = false;
             }
             else {
-                currentWeapon.currentMag += currentWeapon.reserveAmmo;
-                currentWeapon.reserveAmmo = 0;
+                currentWeapon.CurrentMag += currentWeapon.ReserveAmmo;
+                currentWeapon.ReserveAmmo = 0;
                 isReloading = false;
             }
         }
@@ -89,18 +91,20 @@ public class UseWeapon : MonoBehaviour
 
     private void Fire() {
         if (firingTime > 0) firingTime -= Time.deltaTime;
-        if (Input.GetMouseButton(0) && !isReloading && firingTime <= 0 && currentWeapon.currentMag > 0) {
-            currentWeapon.currentMag--;
-            firingTime = currentWeapon.firingRate;
+        if (Input.GetMouseButton(0) && !isReloading && firingTime <= 0 && currentWeapon.CurrentMag > 0) {
+            currentWeapon.CurrentMag--;
+            firingTime = currentWeapon.FiringRate;
             ZombieHealth hitZombie;
             if (Physics.Raycast(playerCamera.gameObject.transform.position, playerCamera.gameObject.transform.forward, out RaycastHit hit, Mathf.Infinity, playerMask)) {
                 if (hit.transform.gameObject.CompareTag("Zombie")) {
                     hitZombie = hit.transform.gameObject.GetComponent<ZombieHealth>();
-                    hitZombie.health -= currentWeapon.bulletDamage;
+                    hitZombie.health -= currentWeapon.BulletDamage;
+                    playerPoints.AddPoints(currentWeapon.PointValue);
+                    
                 }
                 else {
                     Quaternion rot = Quaternion.FromToRotation(Vector3.forward, hit.normal);
-                    poolManager.SpawnFromPool("Bullet Hole", hit.point, rot);
+                    poolManager.SpawnFromPool(currentWeapon.BulletHoleSize, hit.point, rot);
                 }
             }
         }
@@ -109,37 +113,23 @@ public class UseWeapon : MonoBehaviour
     private void SwitchWeapon() {
         if (Input.GetKeyDown(KeyCode.Alpha1) && currentWeapon == secondaryWeapon && !isReloading) {
             StartCoroutine(SwitchToPrimary());
-        } else if (Input.GetKeyDown(KeyCode.Alpha2) && currentWeapon == primaryWeapon && !isReloading && secondaryWeapon.name != "None") {
+        } else if (Input.GetKeyDown(KeyCode.Alpha2) && currentWeapon == primaryWeapon && !isReloading) {
             StartCoroutine(SwitchToSecondary());
         }
     }
 
 
     IEnumerator SwitchToPrimary() {
-        yield return new WaitForSeconds(primaryWeapon.drawTime);
+        yield return new WaitForSeconds(primaryWeapon.DrawTime);
         currentWeapon = primaryWeapon;
     }
     IEnumerator SwitchToSecondary() {
-        yield return new WaitForSeconds(secondaryWeapon.drawTime);
+        yield return new WaitForSeconds(secondaryWeapon.DrawTime);
         currentWeapon = secondaryWeapon;
     }
 
-    public void PickupGun(Weapon newGun) {
-        newGun.GetType();
-        if(secondaryWeapon.name == "None") {
-            secondaryWeapon = newGun;
-            SwitchToSecondary();
-        }
-        else if(currentWeapon == primaryWeapon) {
-            primaryWeapon = newGun;
-        }
-        else if(currentWeapon == secondaryWeapon) {
-            secondaryWeapon = newGun;
-        }
-    }
-
     private void NoAmmo() {
-        if (currentWeapon.reserveAmmo == 0 && currentWeapon.currentMag == 0) {
+        if (currentWeapon.ReserveAmmo == 0 && currentWeapon.CurrentMag == 0) {
             noAmmoText.SetActive(true);
         }
         else { noAmmoText.SetActive(false); }

@@ -5,15 +5,16 @@ using UnityEngine;
 public class None : Weapon
 {
     public None() {
-        weaponName = "None";
-        reserveAmmo = 0;
-        maxReserveAmmo = 0;
-        currentMag = 0;
-        maxMag = 0;
-        drawTime = 0;
-        bulletDamage = 0;
-        reloadSpeed = 0;
-        firingRate = 0;
+        WeaponName = "None";
+        ReserveAmmo = 0;
+        MaxReserveAmmo = 0;
+        CurrentMag = 0;
+        MaxMag = 0;
+        DrawTime = 0;
+        BulletDamage = 0;
+        ReloadSpeed = 0;
+        FiringRate = 0;
+        PointValue = 0;
     }
 
 }
