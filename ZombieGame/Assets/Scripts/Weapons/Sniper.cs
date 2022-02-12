@@ -7,8 +7,8 @@ public class Sniper : Weapon
     public Sniper() {
         WeaponName = "Sniper";
         BulletHoleSize = "Big";
-        ReserveAmmo = 40;
-        MaxReserveAmmo = 40;
+        ReserveAmmo = 20;
+        MaxReserveAmmo = 20;
         CurrentMag = 5;
         MaxMag = 5;
         DrawTime = 3f;

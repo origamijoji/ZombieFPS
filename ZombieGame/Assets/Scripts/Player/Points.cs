@@ -6,7 +6,6 @@ public class Points : MonoBehaviour
 {
     public int currentPoints;
     public string lastTransaction;
-    public string previousTransaction;
 
     public float transactionTimer;
     private float transactionTime = 1.5f;

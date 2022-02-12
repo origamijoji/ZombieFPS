@@ -59,18 +59,17 @@ public class UseWeapon : MonoBehaviour
     }
     private void ProcessReload() {
         if (Input.GetKeyDown(KeyCode.R) && !isReloading && !isSwitching && primaryWeapon.ReserveAmmo > 0 && primaryWeapon.CurrentMag != primaryWeapon.MaxMag) {
-            isReloading = true;
             StartCoroutine(Reload());
         }
         else if (primaryWeapon.CurrentMag == 0 && !isReloading && !isSwitching && primaryWeapon.ReserveAmmo > 0) {
-            isReloading = true;
             StartCoroutine(Reload());
         }
     }
 
 
     IEnumerator Reload() {
-        while(isReloading) {
+        isReloading = true;
+        while (isReloading) {
             yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
             int ammoRequired = primaryWeapon.MaxMag - primaryWeapon.CurrentMag;
             if(primaryWeapon.ReserveAmmo > ammoRequired) {
@@ -96,7 +95,7 @@ public class UseWeapon : MonoBehaviour
             if (Physics.Raycast(playerCamera.gameObject.transform.position, playerCamera.gameObject.transform.forward, out RaycastHit hit, Mathf.Infinity, playerMask)) {
                 if (hit.transform.gameObject.CompareTag("Zombie Head")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
-                    hitZombie.TakeDamage(primaryWeapon.BulletDamage, 1.25f);
+                    hitZombie.TakeDamage(primaryWeapon.BulletDamage, primaryWeapon.Crit);
                     playerPoints.AddPoints(primaryWeapon.PointValue);
                 }
                 else if (hit.transform.gameObject.CompareTag("Zombie")) {
