@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pistol : Weapon {
     public Pistol() {
-        WeaponName = "Pistol";
+        WeaponName = "M1911";
         BulletHoleSize = "Small";
         ReserveAmmo = 42;
         MaxReserveAmmo = 42;

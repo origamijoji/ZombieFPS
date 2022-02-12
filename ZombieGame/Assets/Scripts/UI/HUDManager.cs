@@ -19,11 +19,11 @@ public class HUDManager : MonoBehaviour {
     public TextMeshProUGUI purchaseText;
 
     [SerializeField] private GameObject reloading;
-    private float reloadTimer;
+    [HideInInspector] public float reloadTimer;
     private Slider reloadingSlider;
 
     [SerializeField] private GameObject switching;
-    private float switchTimer;
+    [HideInInspector] public float switchTimer;
     private Slider switchingSlider;
 
 
@@ -37,9 +37,9 @@ public class HUDManager : MonoBehaviour {
     }
 
     void Update() {
-        gunText.text = useWeapon.currentWeapon.WeaponName;
-        magText.text = useWeapon.currentWeapon.CurrentMag.ToString();
-        ammoText.text = useWeapon.currentWeapon.ReserveAmmo.ToString();
+        gunText.text = useWeapon.primaryWeapon.WeaponName;
+        magText.text = useWeapon.primaryWeapon.CurrentMag.ToString();
+        ammoText.text = useWeapon.primaryWeapon.ReserveAmmo.ToString();
         pointText.text = playerPoints.currentPoints.ToString();
         transactionText.text = playerPoints.lastTransaction;
 
@@ -53,23 +53,23 @@ public class HUDManager : MonoBehaviour {
         if (useWeapon.isReloading) {
             reloading.SetActive(true);
             reloadTimer -= Time.deltaTime;
-            reloadingSlider.maxValue = useWeapon.currentWeapon.ReloadSpeed;
+            reloadingSlider.maxValue = useWeapon.primaryWeapon.ReloadSpeed;
             reloadingSlider.value = reloadTimer;
         }
         else {
             reloading.SetActive(false);
-            reloadTimer = useWeapon.currentWeapon.ReloadSpeed;
+            reloadTimer = useWeapon.primaryWeapon.ReloadSpeed;
         }
 
         if (useWeapon.isSwitching) {
             switching.SetActive(true);
             switchTimer -= Time.deltaTime;
-            switchingSlider.maxValue = useWeapon.otherWeapon.DrawTime;
+            switchingSlider.maxValue = useWeapon.secondaryWeapon.DrawTime;
             switchingSlider.value = switchTimer;
         }
         else {
             switching.SetActive(false);
-            switchTimer = useWeapon.otherWeapon.DrawTime;
+            switchTimer = useWeapon.secondaryWeapon.DrawTime;
         }
 
     }
