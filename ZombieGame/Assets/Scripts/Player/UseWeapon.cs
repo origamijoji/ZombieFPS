@@ -5,6 +5,7 @@ using UnityEngine;
 public class UseWeapon : MonoBehaviour
 {
     public Weapon currentWeapon;
+    public Weapon otherWeapon;
     public Weapon primaryWeapon;
     public Weapon secondaryWeapon;
 
@@ -41,6 +42,7 @@ public class UseWeapon : MonoBehaviour
         primaryWeapon = new Pistol();
         secondaryWeapon = new None();
         currentWeapon = primaryWeapon;
+        otherWeapon = secondaryWeapon;
     }
 
     private void Update() {
@@ -49,6 +51,7 @@ public class UseWeapon : MonoBehaviour
         SwitchWeapon();
         ShowInspector();
         NoAmmo();
+        
     }
 
     private void ShowInspector() {
@@ -111,21 +114,28 @@ public class UseWeapon : MonoBehaviour
     }
 
     private void SwitchWeapon() {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && currentWeapon == secondaryWeapon && !isReloading) {
+        if (Input.GetKeyDown(KeyCode.Alpha1) && currentWeapon.WeaponName == secondaryWeapon.WeaponName && !isReloading) {
             StartCoroutine(SwitchToPrimary());
-        } else if (Input.GetKeyDown(KeyCode.Alpha2) && currentWeapon == primaryWeapon && !isReloading) {
+        } else if (Input.GetKeyDown(KeyCode.Alpha2) && currentWeapon.WeaponName == primaryWeapon.WeaponName && !isReloading) {
             StartCoroutine(SwitchToSecondary());
         }
     }
 
 
-    IEnumerator SwitchToPrimary() {
+    public IEnumerator SwitchToPrimary() {
+        isSwitching = true;
         yield return new WaitForSeconds(primaryWeapon.DrawTime);
         currentWeapon = primaryWeapon;
+        otherWeapon = secondaryWeapon;
+        isSwitching = false;
+
     }
-    IEnumerator SwitchToSecondary() {
+    public IEnumerator SwitchToSecondary() {
+        isSwitching = true;
         yield return new WaitForSeconds(secondaryWeapon.DrawTime);
         currentWeapon = secondaryWeapon;
+        otherWeapon = primaryWeapon;
+        isSwitching = false;
     }
 
     private void NoAmmo() {
@@ -134,6 +144,5 @@ public class UseWeapon : MonoBehaviour
         }
         else { noAmmoText.SetActive(false); }
     }
-
 
 }

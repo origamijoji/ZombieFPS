@@ -5,6 +5,7 @@ using System;
 
 public class GiveGun : MonoBehaviour {
     public int cost;
+    public int ammoCost;
     public float range = 3;
     public string weapon;
 
@@ -12,7 +13,7 @@ public class GiveGun : MonoBehaviour {
     private GameObject player;
     private UseWeapon playerUseWeapon;
     private Points playerPoints;
-    public PhysicalUI physUI;
+    private PhysicalUI physUI;
 
     void Start() {
         weaponType = Type.GetType(weapon);
@@ -32,12 +33,35 @@ public class GiveGun : MonoBehaviour {
     }
 
     public void PickupGun() {
-        playerPoints.RemovePoints(cost);
-        if (playerUseWeapon.secondaryWeapon is None) {
-            playerUseWeapon.secondaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+        //if gun not obtained, purchase it
+        if (playerUseWeapon.secondaryWeapon.WeaponName != weapon && playerUseWeapon.primaryWeapon.WeaponName != weapon) {
+            playerPoints.RemovePoints(cost);
+            if (playerUseWeapon.secondaryWeapon is None) {
+                playerUseWeapon.secondaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+                playerUseWeapon.otherWeapon = playerUseWeapon.secondaryWeapon;
+                StartCoroutine(playerUseWeapon.SwitchToSecondary());
+            }
+            else {
+                if (playerUseWeapon.currentWeapon == playerUseWeapon.primaryWeapon) {
+                    playerUseWeapon.primaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+                    playerUseWeapon.currentWeapon = playerUseWeapon.primaryWeapon;
+                }
+                else {
+                    playerUseWeapon.secondaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+                    playerUseWeapon.currentWeapon = playerUseWeapon.secondaryWeapon;
+                }
+            }
         }
+        //if weapon is obtained, purchase ammo instead
         else {
-            playerUseWeapon.currentWeapon = (Weapon)Activator.CreateInstance(weaponType);
+            playerPoints.RemovePoints(ammoCost);
+            if(playerUseWeapon.primaryWeapon.WeaponName == weapon) {
+                playerUseWeapon.primaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+            }
+            else if(playerUseWeapon.secondaryWeapon.WeaponName == weapon) {
+                playerUseWeapon.secondaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+            }
+
         }
     }
 }
