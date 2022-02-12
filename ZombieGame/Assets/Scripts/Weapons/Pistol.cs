@@ -11,9 +11,12 @@ public class Pistol : Weapon {
         CurrentMag = 7;
         MaxMag = 7;
         DrawTime = 0.6f;
-        BulletDamage = 25;
+        BulletDamage = 20;
         ReloadSpeed = 1f;
-        FiringRate = 0.25f;
-        PointValue = 8;
+        FiringRate = 0.5f;
+        PointValue = 5;
+        Crit = 1.25f;
+        Pierce = false;
+        Automatic = false;
     }
 }

@@ -21,10 +21,10 @@ public class ZombieHealth : MonoBehaviour
         healthBar.value = health;
     }
 
-    public void TakeDamage() {
-
+    public void TakeDamage(float dmg) {
+        health -= dmg;
     }
-    public void TakeDamage(float multiplier) {
-
+    public void TakeDamage(float dmg, float multiplier) {
+        health -= dmg * multiplier;
     }
 }

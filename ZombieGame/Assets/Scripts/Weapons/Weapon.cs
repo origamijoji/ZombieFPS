@@ -15,6 +15,9 @@ public abstract class Weapon : MonoBehaviour {
     public float ReloadSpeed { get; set; }
     public float FiringRate { get; set; }
     public int PointValue { get; set; }
+    public float Crit { get; set; }
+    public bool Pierce { get; set; }
+    public bool Automatic { get; set; }
 
 }
 

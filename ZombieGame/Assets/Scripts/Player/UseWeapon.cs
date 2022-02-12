@@ -24,9 +24,11 @@ public class UseWeapon : MonoBehaviour
     public float reloadTime;
     public bool isReloading;
     public bool isSwitching;
-
+    
+    //automatic
+    //pierce
     public GameObject noAmmoText;
-
+    
     private void Awake() {
         mouseLook = gameObject.GetComponent<MouseLook>();
         playerCamera = mouseLook.playerCamera;
@@ -85,7 +87,6 @@ public class UseWeapon : MonoBehaviour
         yield break;
     }
 
-
     private void Fire() {
         if (firingTime > 0) firingTime -= Time.deltaTime;
         if (Input.GetMouseButton(0) && !isReloading && !isSwitching && firingTime <= 0 && primaryWeapon.CurrentMag > 0) {
@@ -93,11 +94,15 @@ public class UseWeapon : MonoBehaviour
             firingTime = primaryWeapon.FiringRate;
             ZombieHealth hitZombie;
             if (Physics.Raycast(playerCamera.gameObject.transform.position, playerCamera.gameObject.transform.forward, out RaycastHit hit, Mathf.Infinity, playerMask)) {
-                if (hit.transform.gameObject.CompareTag("Zombie")) {
-                    hitZombie = hit.transform.gameObject.GetComponent<ZombieHealth>();
-                    hitZombie.health -= primaryWeapon.BulletDamage;
+                if (hit.transform.gameObject.CompareTag("Zombie Head")) {
+                    hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
+                    hitZombie.TakeDamage(primaryWeapon.BulletDamage, 1.25f);
                     playerPoints.AddPoints(primaryWeapon.PointValue);
-                    
+                }
+                else if (hit.transform.gameObject.CompareTag("Zombie")) {
+                    hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
+                    hitZombie.TakeDamage(primaryWeapon.BulletDamage);
+                    playerPoints.AddPoints(primaryWeapon.PointValue);
                 }
                 else {
                     Quaternion rot = Quaternion.FromToRotation(Vector3.forward, hit.normal);
