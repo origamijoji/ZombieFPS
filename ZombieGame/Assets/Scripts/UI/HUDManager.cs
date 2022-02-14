@@ -17,15 +17,12 @@ public class HUDManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI purchaseText;
 
     [SerializeField] private GameObject reloading;
-    [HideInInspector] public float reloadTimer;
     private Slider reloadingSlider;
 
     [SerializeField] private GameObject switching;
-    [HideInInspector] public float switchTimer;
     private Slider switchingSlider;
 
     [SerializeField] private GameObject interacting;
-    [HideInInspector] public float interactTimer;
     private Slider interactingSlider;
 
 
@@ -50,8 +47,8 @@ public class HUDManager : MonoBehaviour {
         if (useWeapon.reloadTimer > 0) {
             reloading.SetActive(true);
             reloadingSlider.maxValue = useWeapon.primaryWeapon.ReloadSpeed;
-            reloadingSlider.value = reloadTimer;
-            reloadTimer -= Time.deltaTime;
+            reloadingSlider.value = useWeapon.reloadTimer;
+            useWeapon.reloadTimer -= Time.deltaTime;
         }
         else {
             reloading.SetActive(false);
@@ -60,18 +57,18 @@ public class HUDManager : MonoBehaviour {
         if (useWeapon.switchTimer > 0) {
             switching.SetActive(true);
             switchingSlider.maxValue = useWeapon.secondaryWeapon.DrawTime;
-            switchingSlider.value = switchTimer;
-            switchTimer -= Time.deltaTime;
+            switchingSlider.value = useWeapon.switchTimer;
+            useWeapon.switchTimer -= Time.deltaTime;
         }
         else {
             switching.SetActive(false);
         }
 
-        if(interactTimer > 0) {
+        if(useWeapon.interactTimer > 0) {
             interacting.SetActive(true);
             interactingSlider.maxValue = useWeapon.interactTime;
-            interactingSlider.value = interactTimer;
-            interactTimer -= Time.deltaTime;
+            interactingSlider.value = useWeapon.interactTimer;
+            useWeapon.interactTimer -= Time.deltaTime;
         }
         else {
             interacting.SetActive(false);

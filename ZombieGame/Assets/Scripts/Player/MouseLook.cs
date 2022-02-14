@@ -13,6 +13,8 @@ public class MouseLook : MonoBehaviour {
 
     private float mouseX;
     private float mouseY;
+
+    private float lockValue;
     #endregion
     #region References
     [Header("~ References <3")]
@@ -25,20 +27,29 @@ public class MouseLook : MonoBehaviour {
     private float xRotation;
     private float yRotation;
     #endregion
-
-
-    private void Update() {
-            mouseX = Input.GetAxisRaw("Mouse X");
-            mouseY = Input.GetAxisRaw("Mouse Y");
-
-            yRotation += mouseX * sensX * multiplier;
-            xRotation -= mouseY * sensY * multiplier;
-
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-            playerCamera.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-            orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+    private void Awake() {
     }
 
+    private void Update() {
+        mouseX = Input.GetAxisRaw("Mouse X");
+        mouseY = Input.GetAxisRaw("Mouse Y");
+
+        yRotation += mouseX * sensX * multiplier * lockValue;
+        xRotation -= mouseY * sensY * multiplier * lockValue;
+
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        playerCamera.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+    }
+
+    public void LockMouseInput(bool locked) {
+        if (locked) {
+            lockValue = 0;
+        }
+        else {
+            lockValue = 1;
+        }
+    }
 }
 

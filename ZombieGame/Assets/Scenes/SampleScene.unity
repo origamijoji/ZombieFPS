@@ -881,9 +881,25 @@ PrefabInstance:
       propertyPath: m_text
       value: $100 Gun / $40 Ammo
       objectReference: {fileID: 0}
+    - target: {fileID: 4097036196599247803, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036196633489173, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197021728029, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4097036197021728031, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_text
       value: Sniper
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197279977416, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197279977418, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_text
@@ -906,7 +922,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.63
+      value: -6.37
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_LocalPosition.y
@@ -947,6 +963,10 @@ PrefabInstance:
     - target: {fileID: 4097036197660873900, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_Name
       value: BuyZone (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873900, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873903, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: cost
@@ -2741,11 +2761,8 @@ MonoBehaviour:
   transactionText: {fileID: 1247867602}
   purchaseText: {fileID: 1796980119}
   reloading: {fileID: 680471427}
-  reloadTimer: 0
   switching: {fileID: 776486212}
-  switchTimer: 0
-  interacting: {fileID: 0}
-  interactTimer: 0
+  interacting: {fileID: 1009056712}
 --- !u!1 &1763931200
 GameObject:
   m_ObjectHideFlags: 0
@@ -3469,10 +3486,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   firingTime: 0
-  reloadTime: 0
   isReloading: 0
+  reloadTimer: 0
   isSwitching: 0
-  interactTime: 0
+  switchTimer: 0
+  isInteracting: 0
+  interactTimer: 0
+  interactTime: 3
+  buyRange: 5
+  isLookingAtBuyZone: 0
+  buyZone:
+    serializedVersion: 2
+    m_Bits: 512
+  canAct: 0
   noAmmoText: {fileID: 1258876320}
 --- !u!114 &1987548611
 MonoBehaviour:
@@ -4020,10 +4046,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4097036196599247803, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4097036196633489168, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 4097036196633489173, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4097036196633489175, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: player
       value: 
@@ -4044,6 +4078,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 1.7489
       objectReference: {fileID: 0}
+    - target: {fileID: 4097036197021728029, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4097036197021728031, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_text
       value: Rifle
@@ -4055,6 +4093,10 @@ PrefabInstance:
     - target: {fileID: 4097036197021728031, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_fontSizeBase
       value: 0.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197279977416, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_RootOrder
@@ -4103,6 +4145,10 @@ PrefabInstance:
     - target: {fileID: 4097036197660873900, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_Name
       value: BuyZone
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873900, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
