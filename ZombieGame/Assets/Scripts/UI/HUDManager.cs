@@ -6,17 +6,15 @@ using UnityEngine.UI;
 
 public class HUDManager : MonoBehaviour {
     private GameObject player;
-    private GameObject[] buyZones;
     private UseWeapon useWeapon;
     private Points playerPoints;
-    private float buyRange = 3;
 
     [SerializeField] private TextMeshProUGUI gunText;
     [SerializeField] private TextMeshProUGUI magText;
     [SerializeField] private TextMeshProUGUI ammoText;
     [SerializeField] private TextMeshProUGUI pointText;
     [SerializeField] private TextMeshProUGUI transactionText;
-    public TextMeshProUGUI purchaseText;
+    [SerializeField] private TextMeshProUGUI purchaseText;
 
     [SerializeField] private GameObject reloading;
     [HideInInspector] public float reloadTimer;
@@ -26,14 +24,20 @@ public class HUDManager : MonoBehaviour {
     [HideInInspector] public float switchTimer;
     private Slider switchingSlider;
 
+    [SerializeField] private GameObject interacting;
+    [HideInInspector] public float interactTimer;
+    private Slider interactingSlider;
+
 
     private void Awake() {
+        //player components
         player = GameObject.FindGameObjectWithTag("Player");
         useWeapon = player.GetComponent<UseWeapon>();
         playerPoints = player.GetComponent<Points>();
-        buyZones = GameObject.FindGameObjectsWithTag("Buy Zone");
+        //local components
         reloadingSlider = reloading.GetComponentInChildren<Slider>();
         switchingSlider = switching.GetComponentInChildren<Slider>();
+        interactingSlider = interacting.GetComponentInChildren<Slider>();
     }
 
     void Update() {
@@ -43,34 +47,40 @@ public class HUDManager : MonoBehaviour {
         pointText.text = playerPoints.currentPoints.ToString();
         transactionText.text = playerPoints.lastTransaction;
 
-        foreach (GameObject element in buyZones) {
-            if (Vector3.Distance(player.transform.position, element.transform.position) < buyRange) {
-                purchaseText.gameObject.SetActive(true);
-            }
-            else { purchaseText.gameObject.SetActive(false); }
-        }
-
-        if (useWeapon.isReloading) {
+        if (useWeapon.reloadTimer > 0) {
             reloading.SetActive(true);
-            reloadTimer -= Time.deltaTime;
             reloadingSlider.maxValue = useWeapon.primaryWeapon.ReloadSpeed;
             reloadingSlider.value = reloadTimer;
+            reloadTimer -= Time.deltaTime;
         }
         else {
             reloading.SetActive(false);
-            reloadTimer = useWeapon.primaryWeapon.ReloadSpeed;
         }
 
-        if (useWeapon.isSwitching) {
+        if (useWeapon.switchTimer > 0) {
             switching.SetActive(true);
-            switchTimer -= Time.deltaTime;
             switchingSlider.maxValue = useWeapon.secondaryWeapon.DrawTime;
             switchingSlider.value = switchTimer;
+            switchTimer -= Time.deltaTime;
         }
         else {
             switching.SetActive(false);
-            switchTimer = useWeapon.secondaryWeapon.DrawTime;
         }
+
+        if(interactTimer > 0) {
+            interacting.SetActive(true);
+            interactingSlider.maxValue = useWeapon.interactTime;
+            interactingSlider.value = interactTimer;
+            interactTimer -= Time.deltaTime;
+        }
+        else {
+            interacting.SetActive(false);
+        }
+
+        if (useWeapon.CanPurchase()) {
+            purchaseText.gameObject.SetActive(true);
+        }
+        else { purchaseText.gameObject.SetActive(false); }
 
     }
 
