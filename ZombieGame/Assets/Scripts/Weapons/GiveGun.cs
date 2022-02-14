@@ -6,53 +6,66 @@ using System;
 public class GiveGun : MonoBehaviour {
     public int cost;
     public int ammoCost;
-    public float range = 3;
     public string weapon;
 
     private Type weaponType;
     private GameObject player;
-    private UseWeapon playerUseWeapon;
+    private UseWeapon useWeapon;
     private Points playerPoints;
     private PhysicalUI physUI;
-    public HUDManager hudManager;
+    private bool isInRange;
+
+    private void Awake() {
+        //player components
+        player = GameObject.FindGameObjectWithTag("Player");
+        useWeapon = player.GetComponent<UseWeapon>();
+        playerPoints = player.GetComponent<Points>();
+        //local components
+        physUI = gameObject.GetComponentInChildren<PhysicalUI>();
+    }
 
     void Start() {
         weaponType = Type.GetType(weapon);
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerUseWeapon = player.GetComponent<UseWeapon>();
-        playerPoints = player.GetComponent<Points>();
-        physUI = gameObject.GetComponentInChildren<PhysicalUI>();
-        hudManager = GameObject.Find("HUD Manager").GetComponent<HUDManager>();
     }
     private void Update() {
-        if (Vector3.Distance(player.transform.position, transform.position) < range) {
+        if (Vector3.Distance(gameObject.transform.position, player.gameObject.transform.position) < useWeapon.buyRange) {
             physUI.gameObject.SetActive(true);
-            if (Input.GetKeyDown(KeyCode.E)) {
-                PickupGun();
-            }
         }
         else { physUI.gameObject.SetActive(false); }
     }
 
-    public void PickupGun() {
-        //if gun not obtained, purchase it
-        if (playerUseWeapon.secondaryWeapon.WeaponName != weapon && playerUseWeapon.primaryWeapon.WeaponName != weapon) {
+    public void DecidePurchase() {
+        if (useWeapon.secondaryWeapon.WeaponName != weapon && useWeapon.primaryWeapon.WeaponName != weapon) { /// if weapon is not currently owned
             playerPoints.RemovePoints(cost);
-            if (playerUseWeapon.secondaryWeapon is None) {
-                playerUseWeapon.secondaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
-                hudManager.switchTimer = playerUseWeapon.secondaryWeapon.DrawTime;
-                StartCoroutine(playerUseWeapon.Switch());
+            if (useWeapon.secondaryWeapon is None) { //if no current secondary, make weapon secondary
+                BuySecondWeapon();
             }
-            else {
-               playerUseWeapon.primaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+            else { //if player has two weapons, make their current weapon the purchassed weapon
+                ReplaceWeapon();
             }
         }
-        //if weapon is obtained, purchase ammo instead
-        else {
+        else { ///if weapon is obtained, purchase ammo instead
             playerPoints.RemovePoints(ammoCost);
-            if(playerUseWeapon.primaryWeapon.WeaponName == weapon) {
-                playerUseWeapon.primaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+            if (useWeapon.primaryWeapon.WeaponName == weapon) {
+                BuyAmmo();
+            }
+            else { //if weapon is not in main hand, do nothing
+                return;
             }
         }
     }
+
+    private void BuySecondWeapon() {
+        useWeapon.secondaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+        useWeapon.isInteracting = false;
+    }
+    private void ReplaceWeapon() {
+        useWeapon.primaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
+        useWeapon.isInteracting = false;
+    }
+    private void BuyAmmo() {
+        useWeapon.primaryWeapon.ReserveAmmo = useWeapon.primaryWeapon.MaxReserveAmmo;
+        useWeapon.isInteracting = false;
+    }
+
 }
