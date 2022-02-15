@@ -4,22 +4,33 @@ using UnityEngine;
 using System;
 
 public class GiveGun : MonoBehaviour {
-    public int cost;
-    public int ammoCost;
-    public string weapon;
 
-    private Type weaponType;
+    /// <summary>
+    /// This script lets you edit its values in the inspector, and the player will call them when they purchase a weapon
+    /// The UI of the script will activate only when the player is within range of it.
+    ///
+    /// For multiplayer implementation: The physUI will have to either check for all players, or be constantly enabled
+    /// </summary>
+
+    [Tooltip("Name of weapon being sold")]
+    public string weapon;
+    [Tooltip("Cost of currently sold weapon")]
+    public int cost;
+    [Tooltip("cost of ammo for the currently sold weapon")]
+    public int ammoCost;
+    [Tooltip("The range the player must be for the UI to enable on the child object")]
+    private float UIRange;
+
+
+    [HideInInspector]
+    public Type weaponType;
     private GameObject player;
-    private UseWeapon useWeapon;
-    private Points playerPoints;
     private PhysicalUI physUI;
-    private bool isInRange;
 
     private void Awake() {
         //player components
         player = GameObject.FindGameObjectWithTag("Player");
-        useWeapon = player.GetComponent<UseWeapon>();
-        playerPoints = player.GetComponent<Points>();
+
         //local components
         physUI = gameObject.GetComponentInChildren<PhysicalUI>();
     }
@@ -28,44 +39,11 @@ public class GiveGun : MonoBehaviour {
         weaponType = Type.GetType(weapon);
     }
     private void Update() {
-        if (Vector3.Distance(gameObject.transform.position, player.gameObject.transform.position) < useWeapon.buyRange) {
+
+        if (Vector3.Distance(gameObject.transform.position, player.gameObject.transform.position) < 3) {
             physUI.gameObject.SetActive(true);
         }
         else { physUI.gameObject.SetActive(false); }
-    }
-
-    public void DecidePurchase() {
-        if (useWeapon.secondaryWeapon.WeaponName != weapon && useWeapon.primaryWeapon.WeaponName != weapon) { /// if weapon is not currently owned
-            playerPoints.RemovePoints(cost);
-            if (useWeapon.secondaryWeapon is None) { //if no current secondary, make weapon secondary
-                BuySecondWeapon();
-            }
-            else { //if player has two weapons, make their current weapon the purchassed weapon
-                ReplaceWeapon();
-            }
-        }
-        else { ///if weapon is obtained, purchase ammo instead
-            playerPoints.RemovePoints(ammoCost);
-            if (useWeapon.primaryWeapon.WeaponName == weapon) {
-                BuyAmmo();
-            }
-            else { //if weapon is not in main hand, do nothing
-                return;
-            }
-        }
-    }
-
-    private void BuySecondWeapon() {
-        useWeapon.secondaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
-        useWeapon.isInteracting = false;
-    }
-    private void ReplaceWeapon() {
-        useWeapon.primaryWeapon = (Weapon)Activator.CreateInstance(weaponType);
-        useWeapon.isInteracting = false;
-    }
-    private void BuyAmmo() {
-        useWeapon.primaryWeapon.ReserveAmmo = useWeapon.primaryWeapon.MaxReserveAmmo;
-        useWeapon.isInteracting = false;
     }
 
 }

@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovePlayer : MonoBehaviour
-{
+public class MovePlayer : MonoBehaviour {
     public Rigidbody rb;
     public Transform orientation;
     public float moveSpeed;
@@ -13,19 +12,19 @@ public class MovePlayer : MonoBehaviour
     public float gravity;
     public float groundDrag = 7;
     public float airDrag;
+
     private Vector3 moveDir;
     private float xInput;
     private float zInput;
     public bool isGrounded = true;
 
+    private float lockMultiplier;
 
-    void Start()
-    {
+    void Start() {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
-    {
+    void Update() {
         GetAxis();
         moveDir = xInput * orientation.right + zInput * orientation.forward;
 
@@ -39,7 +38,7 @@ public class MovePlayer : MonoBehaviour
         zInput = Input.GetAxisRaw("Vertical");
     }
     private void ApplyMovement() {
-        rb.AddForce(moveDir.normalized * moveSpeed, ForceMode.Acceleration);
+        rb.AddForce(moveDir.normalized * moveSpeed * lockMultiplier, ForceMode.Acceleration);
     }
 
     private void DragControl() {
@@ -50,5 +49,14 @@ public class MovePlayer : MonoBehaviour
             moveSpeed = Mathf.Lerp(moveSpeed, runSpeed, acceleration * Time.deltaTime);
         }
         else { moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, acceleration * Time.deltaTime); }
+    }
+
+    public void LockMovement(bool locked) {
+        if (locked) {
+            lockMultiplier = 0;
+        }
+        else {
+            lockMultiplier = 1;
+        }
     }
 }

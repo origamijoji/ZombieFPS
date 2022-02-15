@@ -12,11 +12,16 @@ public class Rifle : Weapon {
         MaxMag = 20;
         DrawTime = 1.5f;
         BulletDamage = 25;
+        DamageFalloff = 20;
         ReloadSpeed = 2f;
         FiringRate = 0.25f;
         PointValue = 3;
-        Crit = 2f;
+        HeadshotMultiplier = 2f;
         Pierce = false;
+        MaxRange = 20;
         Automatic = true;
+        Projectiles = 1;
+        Accuracy = 70;
+        ExplosionRadius = 0;
     }
 }
