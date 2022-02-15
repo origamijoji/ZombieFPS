@@ -181,7 +181,13 @@ public class UseWeapon : MonoBehaviour {
             primaryWeapon.CurrentMag--;
             firingTime = primaryWeapon.FiringRate;
             ZombieHealth hitZombie;
-            if (Physics.Raycast(playerCamera.gameObject.transform.position, playerCamera.gameObject.transform.forward, out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
+
+            if (Physics.Raycast(playerCamera.gameObject.transform.position,
+                playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
+                (new Vector3(UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius),
+                UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius))),
+                out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
+
                 if (hit.transform.gameObject.CompareTag("Zombie Head")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
                     hitZombie.TakeDamage(primaryWeapon.BulletDamage, primaryWeapon.HeadshotMultiplier);
@@ -198,6 +204,20 @@ public class UseWeapon : MonoBehaviour {
                 }
             }
         }
+        /*
+        for (int shots = primaryWeapon.Projectiles; shots > 0; shots++) {
+            Vector3 bulletOrigin = playerCamera.gameObject.transform.forward;
+
+            Physics.Raycast
+                (playerCamera.gameObject.transform.position,
+                bulletOrigin + playerCamera.transform.TransformDirection
+                (new Vector3(UnityEngine.Random.Range
+                (-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius), 
+                UnityEngine.Random.Range
+                (-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius))),
+                out RaycastHit hit, primaryWeapon.MaxRange, playerMask);
+        }
+        */
     }
     #endregion
     #region NoAmmo

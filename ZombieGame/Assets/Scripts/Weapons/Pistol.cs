@@ -21,7 +21,7 @@ public class Pistol : Weapon {
         MaxRange = 15;
         Automatic = false;
         Projectiles = 1;
-        Accuracy = 80;
+        BulletSpreadRadius = 0.1f;
         ExplosionRadius = 0;
     }
 }

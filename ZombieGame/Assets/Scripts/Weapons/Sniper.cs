@@ -21,7 +21,7 @@ public class Sniper : Weapon {
         MaxRange = 50;
         Automatic = false;
         Projectiles = 1;
-        Accuracy = 90;
+        BulletSpreadRadius = 1;
         ExplosionRadius = 0;
     }
 }
