@@ -64,7 +64,7 @@ public class HUDManager : MonoBehaviour {
             switching.SetActive(false);
         }
 
-        if(useWeapon.interactTimer > 0) {
+        if(useWeapon.interactTimer > 0 && useWeapon.isInteracting) {
             interacting.SetActive(true);
             interactingSlider.maxValue = useWeapon.interactTime;
             interactingSlider.value = useWeapon.interactTimer;
@@ -72,7 +72,9 @@ public class HUDManager : MonoBehaviour {
         }
         else {
             interacting.SetActive(false);
+            useWeapon.interactTimer = 0;
         }
+
 
         if (useWeapon.CanPurchase()) {
             purchaseText.gameObject.SetActive(true);

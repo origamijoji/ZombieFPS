@@ -15,6 +15,12 @@ public class Points : MonoBehaviour
         lastTransaction = "+" + value;
     }
 
+    public void AddPoints(int value, float mult) {
+        transactionTimer = transactionTime;
+        currentPoints += (int) Mathf.Round(value * mult);
+        lastTransaction = "+" + value;
+    }
+
     public void RemovePoints(int value) {
         transactionTimer = transactionTime;
         currentPoints -= value;

@@ -12,11 +12,16 @@ public class Pistol : Weapon {
         MaxMag = 7;
         DrawTime = 0.6f;
         BulletDamage = 20;
+        DamageFalloff = 10;
         ReloadSpeed = 1f;
         FiringRate = 0.5f;
         PointValue = 5;
-        Crit = 1.25f;
+        HeadshotMultiplier = 1.25f;
         Pierce = false;
+        MaxRange = 15;
         Automatic = false;
+        Projectiles = 1;
+        Accuracy = 80;
+        ExplosionRadius = 0;
     }
 }

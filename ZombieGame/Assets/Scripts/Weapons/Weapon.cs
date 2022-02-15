@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour {
-
-    public string WeaponName { get; set; }
-    public string BulletHoleSize { get; set; }
-    public int ReserveAmmo { get; set; }
-    public int MaxReserveAmmo { get; set; }
-    public int CurrentMag { get; set; }
-    public int MaxMag { get; set; }
-    public float DrawTime { get; set; }
-    public float BulletDamage { get; set; }
-    public float ReloadSpeed { get; set; }
-    public float FiringRate { get; set; }
-    public int PointValue { get; set; }
-    public float Crit { get; set; }
-    public bool Pierce { get; set; }
-    public bool Automatic { get; set; }
+    public string WeaponName { get; set; } // String name of weapon
+    public string BulletHoleSize { get; set; } // Size of bullet hole called by PoolManager
+    public int ReserveAmmo { get; set; } // Amount of reserve ammo weapon spawns with
+    public int MaxReserveAmmo { get; set; } // Maximum capacity of reserve ammo
+    public int CurrentMag { get; set; } // Amount of magazine ammo weapon spawns with
+    public int MaxMag { get; set; } // Maximum capacity of magazine
+    public float DrawTime { get; set; } // Speed weapon is switched to
+    public float BulletDamage { get; set; } // Base damage of each bullet
+    public float DamageFalloff { get; set; } // % damage falls off at max range
+    public float ReloadSpeed { get; set; } // Speed weapon is reloaded at
+    public float FiringRate { get; set; } // Amount of time inbetween shots
+    public int PointValue { get; set; } // Base points given when hitting a zombie
+    public float PointMultiplier { get; set; } // Point multiplier when hitting a headshot
+    public float HeadshotMultiplier { get; set; } // Damage multiplier when hitting a headshot
+    public bool Pierce { get; set; } // Can weapon do collateral damage
+    public float MaxRange { get; set; } // Max range weapon can shoot
+    public bool Automatic { get; set; } // Can weapon be fired automatically (holding left click)
+    public int Projectiles { get; set; } // How many projectiles are shot in one click
+    public float Accuracy { get; set; } // Randomization of shots: % of 100
+    public float ExplosionRadius { get; set; } // Explosion radius of hit.point
 
 }
 
