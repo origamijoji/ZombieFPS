@@ -3314,8 +3314,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1987548606}
   - component: {fileID: 1987548608}
-  - component: {fileID: 1987548612}
   - component: {fileID: 1987548610}
+  - component: {fileID: 1987548612}
   - component: {fileID: 1987548607}
   - component: {fileID: 1987548611}
   - component: {fileID: 1987548603}
@@ -3476,12 +3476,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dcfcab2f9d04d54588d2508c7ea0d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  primaryWeapon: {fileID: 0}
-  secondaryWeapon: {fileID: 0}
   primary: 
   secondary: 
-  currentMagazineI: 0
-  reserveAmmoI: 0
+  currentMagazine: 0
+  reserveAmmo: 0
+  primaryWeapon: {fileID: 0}
+  secondaryWeapon: {fileID: 0}
   playerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -3493,12 +3493,11 @@ MonoBehaviour:
   isInteracting: 0
   interactTimer: 0
   interactTime: 3
-  buyRange: 5
+  buyRange: 8
   isLookingAtBuyZone: 0
-  buyZone:
+  whatIsBuyZone:
     serializedVersion: 2
     m_Bits: 512
-  canAct: 0
   noAmmoText: {fileID: 1258876320}
 --- !u!114 &1987548611
 MonoBehaviour:

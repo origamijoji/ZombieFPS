@@ -30,5 +30,13 @@ public class Points : MonoBehaviour
         }
     }
 
+    public bool CanAfford(int cost) {
+        if(cost <= currentPoints) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
 }
