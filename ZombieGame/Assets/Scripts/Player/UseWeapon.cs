@@ -50,6 +50,7 @@ public class UseWeapon : MonoBehaviour {
     public LayerMask whatIsBuyZone;
 
     Coroutine PurchaseWeapon;
+    Coroutine FireWeapon;
     //automatic
     //pierce
     //range
@@ -176,9 +177,11 @@ public class UseWeapon : MonoBehaviour {
      * Otherwise, place a bullet hole decal on the obj specified by the primaryWeapon's bullet hole size.
      */
     private void Fire() {
-        if (firingTime > 0) firingTime -= Time.deltaTime;
-        if (Input.GetMouseButtonDown(0) && CanOperate() && firingTime <= 0 && primaryWeapon.CurrentMag > 0) { // NOT FULL AUTO
-            StartCoroutine(FireAllProjectiles());
+        //if (firingTime > 0) firingTime -= Time.deltaTime;
+        if (FiringType() && CanOperate() && firingTime <= 0 && primaryWeapon.CurrentMag > 0) { // NOT FULL AUTO
+            if (FireWeapon() != null) {
+                FireWeapon = StartCoroutine(FireAllProjectiles());
+            }
         }
     }
 
@@ -209,7 +212,7 @@ public class UseWeapon : MonoBehaviour {
             }
             yield return null;
         }
-        firingTime = primaryWeapon.FiringRate;
+        yield return new WaitForSeconds(primaryWeapon.firingRate);
         yield break;
     }
     #endregion
@@ -238,6 +241,25 @@ public class UseWeapon : MonoBehaviour {
         }
         else { return true; }
     }
+
+    private int PurchaseCost() {}
+
+    private float DamageCalculation(RaycastHit shot) {
+        shot.distance 
+    }
+
+    private Del FiringType() {
+        switch (primaryWeapon.Automatic) {
+            case: true
+            return Input.GetMouseButton(0);
+            break;
+            case: false
+            return Input.GetMouseButtonDown(0);
+            break;
+        }
+    }
+
+
     #endregion
     #region Weapon Buying
     /*

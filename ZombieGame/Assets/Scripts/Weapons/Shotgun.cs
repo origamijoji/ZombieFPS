@@ -15,7 +15,7 @@ public class Shotgun : Weapon
         BulletDamage = 15;
         DamageFalloff = 20;
         ReloadSpeed = 0.8f;
-        FiringRate = 0.25f;
+        FiringRate = 0.5f;
         PointValue = 2;
         PointMultiplier = 1.3f;
         HeadshotMultiplier = 1.2f;

@@ -23,6 +23,7 @@ public abstract class Weapon : MonoBehaviour {
     public int Projectiles { get; set; } // How many projectiles are shot in one click
     public float BulletSpreadRadius { get; set; } // Radius of inaccuracy
     public float ExplosionRadius { get; set; } // Explosion radius of hit.point
+    public float DamageFalloffRange {get; set; } 
 
 }
 
