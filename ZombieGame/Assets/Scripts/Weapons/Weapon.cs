@@ -21,8 +21,9 @@ public abstract class Weapon : MonoBehaviour {
     public float MaxRange { get; set; } // Max range weapon can shoot
     public bool Automatic { get; set; } // Can weapon be fired automatically (holding left click)
     public int Projectiles { get; set; } // How many projectiles are shot in one click
-    public float Accuracy { get; set; } // Randomization of shots: % of 100
+    public float BulletSpreadRadius { get; set; } // Radius of inaccuracy
     public float ExplosionRadius { get; set; } // Explosion radius of hit.point
+    public float DamageFalloffRange {get; set; } 
 
 }
 

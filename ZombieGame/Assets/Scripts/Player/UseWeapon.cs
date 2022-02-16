@@ -7,9 +7,6 @@ public class UseWeapon : MonoBehaviour {
 
     /// <summary>
     /// Handles all actions a player may do using a weapon
-    ///
-    /// For multiplayer implementation: The UI will have to be channged to a child of the player obj, because this system relies on only one existing 
-    /// or setting referenced UI to each individual player manually.
     /// </summary>
 
 
@@ -50,6 +47,7 @@ public class UseWeapon : MonoBehaviour {
     public LayerMask whatIsBuyZone;
 
     Coroutine PurchaseWeapon;
+    Coroutine FireWeapon;
     //automatic
     //pierce
     //range
@@ -175,13 +173,23 @@ public class UseWeapon : MonoBehaviour {
      * If the collider is layered a zombie or head, call the damage method on the hit zombie...
      * Otherwise, place a bullet hole decal on the obj specified by the primaryWeapon's bullet hole size.
      */
-    private void Fire() { // LINEAR FIRING
-        if (firingTime > 0) firingTime -= Time.deltaTime;
-        if (Input.GetMouseButton(0) && CanOperate() && firingTime <= 0 && primaryWeapon.CurrentMag > 0) { // FULL AUTO
-            primaryWeapon.CurrentMag--;
-            firingTime = primaryWeapon.FiringRate;
-            ZombieHealth hitZombie;
-            if (Physics.Raycast(playerCamera.gameObject.transform.position, playerCamera.gameObject.transform.forward, out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
+    private void Fire() {
+        //if (firingTime > 0) firingTime -= Time.deltaTime;
+        if (Input.GetMouseButtonDown(0) && CanOperate() && primaryWeapon.CurrentMag > 0) { // NOT FULL AUTO
+            FireWeapon = StartCoroutine(FireAllProjectiles());
+        }
+    }
+
+    IEnumerator FireAllProjectiles() {
+        primaryWeapon.CurrentMag--;
+        ZombieHealth hitZombie;
+        for (int shots = primaryWeapon.Projectiles; shots > 0; shots--) {
+            if (Physics.Raycast(playerCamera.gameObject.transform.position,
+            playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
+            (new Vector3(UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius),
+            UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius))),
+            out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
+
                 if (hit.transform.gameObject.CompareTag("Zombie Head")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
                     hitZombie.TakeDamage(primaryWeapon.BulletDamage, primaryWeapon.HeadshotMultiplier);
@@ -197,7 +205,10 @@ public class UseWeapon : MonoBehaviour {
                     poolManager.SpawnFromPool(primaryWeapon.BulletHoleSize, hit.point, rot);
                 }
             }
+            yield return null;
         }
+        yield return new WaitForSeconds(primaryWeapon.FiringRate);
+        yield break;
     }
     #endregion
     #region NoAmmo
@@ -225,6 +236,19 @@ public class UseWeapon : MonoBehaviour {
         }
         else { return true; }
     }
+
+    private int PurchaseCost() {
+        if (!secondaryWeapon.WeaponName.Equals(buyZone.weapon) && !primaryWeapon.WeaponName.Equals(buyZone.weapon)) { 
+            // if weapon is not currently owned
+            return buyZone.cost;
+        }
+        else { 
+            // if weapon is obtained, purchase ammo instead
+            return buyZone.ammoCost;
+        }
+    }
+
+
     #endregion
     #region Weapon Buying
     /*
@@ -240,19 +264,20 @@ public class UseWeapon : MonoBehaviour {
             Physics.Raycast(playerCamera.gameObject.transform.position, playerCamera.gameObject.transform.forward, out RaycastHit hit, buyRange, whatIsBuyZone);
             buyZone = hit.transform.gameObject.GetComponent<GiveGun>();
             //StartCoroutine(Purchasing());
-            if (Purchasing() != null) {
+            if (points.CanAfford(PurchaseCost())) {
                 PurchaseWeapon = StartCoroutine(Purchasing());
             }
         }
 
         if (Input.GetKeyUp(KeyCode.E)) {
-            StopCoroutine(PurchaseWeapon);
-            isInteracting = false;
+            if (PurchaseWeapon != null) {
+                StopCoroutine(PurchaseWeapon);
+            }
+                isInteracting = false;
         }
     }
 
     IEnumerator Purchasing() {
-        Debug.Log("purchasing called");
         while (CanPurchase() && isInteracting) {
             Debug.Log("purchasing");
             interactTimer = interactTime;
@@ -266,8 +291,6 @@ public class UseWeapon : MonoBehaviour {
     }
 
     private void DecidePurchase() {
-        Debug.Log(secondaryWeapon.WeaponName);
-        Debug.Log(buyZone.weapon);
         if (!secondaryWeapon.WeaponName.Equals(buyZone.weapon) && !primaryWeapon.WeaponName.Equals(buyZone.weapon)) { // if weapon is not currently owned
             points.RemovePoints(buyZone.cost);
             if (secondaryWeapon is None) { //if no current secondary, make weapon secondary then switch weapons
@@ -294,7 +317,4 @@ public class UseWeapon : MonoBehaviour {
         }
     }
     #endregion
-    private void UpdateWeaponStats() {
-
-    }
 }

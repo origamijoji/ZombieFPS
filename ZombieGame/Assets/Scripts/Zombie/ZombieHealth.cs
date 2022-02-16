@@ -34,7 +34,8 @@ public class ZombieHealth : MonoBehaviour
 
         }
     }
-    private void PrepZombieNextSpawn() {
 
+    private void PrepZombieNextSpawn() {
+        //stuff here
     }
 }

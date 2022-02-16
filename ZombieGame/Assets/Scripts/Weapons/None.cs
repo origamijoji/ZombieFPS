@@ -21,7 +21,7 @@ public class None : Weapon {
         MaxRange = 0;
         Automatic = false;
         Projectiles = 0;
-        Accuracy = 0;
+        BulletSpreadRadius = 0;
         ExplosionRadius = 0;
     }
 
