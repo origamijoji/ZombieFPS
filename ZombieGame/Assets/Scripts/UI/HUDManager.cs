@@ -10,6 +10,7 @@ public class HUDManager : MonoBehaviour {
     private Points playerPoints;
 
     [SerializeField] private TextMeshProUGUI gunText;
+    [SerializeField] private TextMeshProUGUI flairText;
     [SerializeField] private TextMeshProUGUI magText;
     [SerializeField] private TextMeshProUGUI ammoText;
     [SerializeField] private TextMeshProUGUI pointText;
@@ -25,6 +26,9 @@ public class HUDManager : MonoBehaviour {
     [SerializeField] private GameObject interacting;
     private Slider interactingSlider;
 
+    [SerializeField] private GameObject chambering;
+    private Slider chamberingSlider;
+
 
     private void Awake() {
         //player components
@@ -35,10 +39,12 @@ public class HUDManager : MonoBehaviour {
         reloadingSlider = reloading.GetComponentInChildren<Slider>();
         switchingSlider = switching.GetComponentInChildren<Slider>();
         interactingSlider = interacting.GetComponentInChildren<Slider>();
+        chamberingSlider = chambering.GetComponentInChildren<Slider>();
     }
 
     void Update() {
         gunText.text = useWeapon.primaryWeapon.WeaponName;
+        flairText.text = useWeapon.primaryWeapon.Flair;
         magText.text = useWeapon.primaryWeapon.CurrentMag.ToString();
         ammoText.text = useWeapon.primaryWeapon.ReserveAmmo.ToString();
         pointText.text = playerPoints.currentPoints.ToString();
@@ -64,7 +70,17 @@ public class HUDManager : MonoBehaviour {
             switching.SetActive(false);
         }
 
-        if(useWeapon.interactTimer > 0 && useWeapon.isInteracting) {
+        if (useWeapon.chamberTimer > 0) {
+            chambering.SetActive(true);
+            chamberingSlider.maxValue = useWeapon.primaryWeapon.ChamberTime;
+            chamberingSlider.value = useWeapon.chamberTimer;
+            useWeapon.chamberTimer -= Time.deltaTime;
+        }
+        else {
+            chambering.SetActive(false);
+        }
+
+        if (useWeapon.interactTimer > 0 && useWeapon.isInteracting) {
             interacting.SetActive(true);
             interactingSlider.maxValue = useWeapon.interactTime;
             interactingSlider.value = useWeapon.interactTimer;

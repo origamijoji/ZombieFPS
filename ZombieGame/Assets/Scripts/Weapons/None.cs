@@ -5,6 +5,7 @@ using UnityEngine;
 public class None : Weapon {
     public None() {
         WeaponName = "None";
+        Flair = "None";
         BulletHoleSize = "Small";
         ReserveAmmo = 0;
         MaxReserveAmmo = 0;
@@ -18,6 +19,7 @@ public class None : Weapon {
         PointValue = 0;
         HeadshotMultiplier = 0;
         Pierce = false;
+        ClipFed = false;
         MaxRange = 0;
         Automatic = false;
         Projectiles = 0;

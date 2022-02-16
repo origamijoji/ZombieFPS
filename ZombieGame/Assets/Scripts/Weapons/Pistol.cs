@@ -5,12 +5,13 @@ using UnityEngine;
 public class Pistol : Weapon {
     public Pistol() {
         WeaponName = "Pistol";
+        Flair = "Standard Issue";
         BulletHoleSize = "Small";
         ReserveAmmo = 42;
         MaxReserveAmmo = 42;
         CurrentMag = 7;
         MaxMag = 7;
-        DrawTime = 0.6f;
+        DrawTime = 0.8f;
         BulletDamage = 20;
         DamageFalloff = 10;
         ReloadSpeed = 1f;
@@ -19,6 +20,7 @@ public class Pistol : Weapon {
         PointMultiplier = 1.4f;
         HeadshotMultiplier = 1.25f;
         Pierce = false;
+        ClipFed = true;
         MaxRange = 15;
         Automatic = false;
         Projectiles = 1;

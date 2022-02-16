@@ -6,6 +6,7 @@ public class Shotgun : Weapon
 {
     public Shotgun() {
         WeaponName = "Shotgun";
+        Flair = "Double-Barrel";
         BulletHoleSize = "Very Small";
         ReserveAmmo = 20;
         MaxReserveAmmo = 20;
@@ -20,6 +21,7 @@ public class Shotgun : Weapon
         PointMultiplier = 1.3f;
         HeadshotMultiplier = 1.2f;
         Pierce = false;
+        ClipFed = false;
         MaxRange = 10;
         Automatic = false;
         Projectiles = 20;
