@@ -8,8 +8,6 @@ public class GiveGun : MonoBehaviour {
     /// <summary>
     /// This script lets you edit its values in the inspector, and the player will call them when they purchase a weapon
     /// The UI of the script will activate only when the player is within range of it.
-    ///
-    /// For multiplayer implementation: The physUI will have to either check for all players, or be constantly enabled
     /// </summary>
 
     [Tooltip("Name of weapon being sold")]

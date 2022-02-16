@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -369,13 +369,13 @@ MonoBehaviour:
     size: 10
   - tag: Small
     prefab: {fileID: 6353493990331009882}
-    size: 10
+    size: 40
   - tag: Zombie
     prefab: {fileID: 3482923679347958706, guid: 5a970bbba725df144b8f92673c8eb922, type: 3}
     size: 24
   - tag: Very Small
     prefab: {fileID: 5023944548857395736, guid: fb03cb8ad1b9b8e4d947cda50db30573, type: 3}
-    size: 24
+    size: 30
 --- !u!4 &115886975
 Transform:
   m_ObjectHideFlags: 0
@@ -1952,7 +1952,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnLocations: []
   previousSpawnLocation: {fileID: 0}
-  spawnRate: 5
+  spawnRate: 10
   timeToNextSpawn: 1
 --- !u!4 &971320697
 Transform:

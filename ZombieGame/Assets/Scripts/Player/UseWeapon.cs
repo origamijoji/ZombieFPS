@@ -7,9 +7,6 @@ public class UseWeapon : MonoBehaviour {
 
     /// <summary>
     /// Handles all actions a player may do using a weapon
-    ///
-    /// For multiplayer implementation: The UI will have to be channged to a child of the player obj, because this system relies on only one existing 
-    /// or setting referenced UI to each individual player manually.
     /// </summary>
 
 
@@ -178,10 +175,8 @@ public class UseWeapon : MonoBehaviour {
      */
     private void Fire() {
         //if (firingTime > 0) firingTime -= Time.deltaTime;
-        if (FiringType() && CanOperate() && firingTime <= 0 && primaryWeapon.CurrentMag > 0) { // NOT FULL AUTO
-            if (FireWeapon() != null) {
-                FireWeapon = StartCoroutine(FireAllProjectiles());
-            }
+        if (Input.GetMouseButtonDown(0) && CanOperate() && primaryWeapon.CurrentMag > 0) { // NOT FULL AUTO
+            FireWeapon = StartCoroutine(FireAllProjectiles());
         }
     }
 
@@ -212,7 +207,7 @@ public class UseWeapon : MonoBehaviour {
             }
             yield return null;
         }
-        yield return new WaitForSeconds(primaryWeapon.firingRate);
+        yield return new WaitForSeconds(primaryWeapon.FiringRate);
         yield break;
     }
     #endregion
@@ -242,20 +237,14 @@ public class UseWeapon : MonoBehaviour {
         else { return true; }
     }
 
-    private int PurchaseCost() {}
-
-    private float DamageCalculation(RaycastHit shot) {
-        shot.distance 
-    }
-
-    private Del FiringType() {
-        switch (primaryWeapon.Automatic) {
-            case: true
-            return Input.GetMouseButton(0);
-            break;
-            case: false
-            return Input.GetMouseButtonDown(0);
-            break;
+    private int PurchaseCost() {
+        if (!secondaryWeapon.WeaponName.Equals(buyZone.weapon) && !primaryWeapon.WeaponName.Equals(buyZone.weapon)) { 
+            // if weapon is not currently owned
+            return buyZone.cost;
+        }
+        else { 
+            // if weapon is obtained, purchase ammo instead
+            return buyZone.ammoCost;
         }
     }
 
@@ -275,19 +264,20 @@ public class UseWeapon : MonoBehaviour {
             Physics.Raycast(playerCamera.gameObject.transform.position, playerCamera.gameObject.transform.forward, out RaycastHit hit, buyRange, whatIsBuyZone);
             buyZone = hit.transform.gameObject.GetComponent<GiveGun>();
             //StartCoroutine(Purchasing());
-            if (Purchasing() != null) {
+            if (points.CanAfford(PurchaseCost())) {
                 PurchaseWeapon = StartCoroutine(Purchasing());
             }
         }
 
         if (Input.GetKeyUp(KeyCode.E)) {
-            StopCoroutine(PurchaseWeapon);
-            isInteracting = false;
+            if (PurchaseWeapon != null) {
+                StopCoroutine(PurchaseWeapon);
+            }
+                isInteracting = false;
         }
     }
 
     IEnumerator Purchasing() {
-        Debug.Log("purchasing called");
         while (CanPurchase() && isInteracting) {
             Debug.Log("purchasing");
             interactTimer = interactTime;
@@ -301,8 +291,6 @@ public class UseWeapon : MonoBehaviour {
     }
 
     private void DecidePurchase() {
-        Debug.Log(secondaryWeapon.WeaponName);
-        Debug.Log(buyZone.weapon);
         if (!secondaryWeapon.WeaponName.Equals(buyZone.weapon) && !primaryWeapon.WeaponName.Equals(buyZone.weapon)) { // if weapon is not currently owned
             points.RemovePoints(buyZone.cost);
             if (secondaryWeapon is None) { //if no current secondary, make weapon secondary then switch weapons
@@ -329,7 +317,4 @@ public class UseWeapon : MonoBehaviour {
         }
     }
     #endregion
-    private void UpdateWeaponStats() {
-
-    }
 }
