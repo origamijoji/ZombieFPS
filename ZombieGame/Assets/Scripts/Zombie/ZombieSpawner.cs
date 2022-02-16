@@ -20,7 +20,6 @@ public class ZombieSpawner : MonoBehaviour
             timeToNextSpawn -= Time.deltaTime;
         }
         else { SpawnZombie(); }
-
     }
 
     void SpawnZombie() {

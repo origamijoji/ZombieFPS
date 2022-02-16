@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pistol : Weapon {
     public Pistol() {
-        WeaponName = "M1911";
+        WeaponName = "Pistol";
         BulletHoleSize = "Small";
         ReserveAmmo = 42;
         MaxReserveAmmo = 42;
@@ -16,12 +16,13 @@ public class Pistol : Weapon {
         ReloadSpeed = 1f;
         FiringRate = 0.5f;
         PointValue = 5;
+        PointMultiplier = 1.4f;
         HeadshotMultiplier = 1.25f;
         Pierce = false;
         MaxRange = 15;
         Automatic = false;
         Projectiles = 1;
-        BulletSpreadRadius = 0.1f;
+        BulletSpreadRadius = 0.01f;
         ExplosionRadius = 0;
     }
 }

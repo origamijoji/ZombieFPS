@@ -16,12 +16,13 @@ public class Rifle : Weapon {
         ReloadSpeed = 2f;
         FiringRate = 0.25f;
         PointValue = 3;
+        PointMultiplier = 1.1f;
         HeadshotMultiplier = 2f;
         Pierce = false;
         MaxRange = 20;
         Automatic = true;
         Projectiles = 1;
-        BulletSpreadRadius = 3;
+        BulletSpreadRadius = 0.025f;
         ExplosionRadius = 0;
     }
 }

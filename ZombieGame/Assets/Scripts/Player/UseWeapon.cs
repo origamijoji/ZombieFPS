@@ -175,18 +175,22 @@ public class UseWeapon : MonoBehaviour {
      * If the collider is layered a zombie or head, call the damage method on the hit zombie...
      * Otherwise, place a bullet hole decal on the obj specified by the primaryWeapon's bullet hole size.
      */
-    private void Fire() { // LINEAR FIRING
+    private void Fire() {
         if (firingTime > 0) firingTime -= Time.deltaTime;
-        if (Input.GetMouseButton(0) && CanOperate() && firingTime <= 0 && primaryWeapon.CurrentMag > 0) { // FULL AUTO
-            primaryWeapon.CurrentMag--;
-            firingTime = primaryWeapon.FiringRate;
-            ZombieHealth hitZombie;
+        if (Input.GetMouseButtonDown(0) && CanOperate() && firingTime <= 0 && primaryWeapon.CurrentMag > 0) { // NOT FULL AUTO
+            StartCoroutine(FireAllProjectiles());
+        }
+    }
 
+    IEnumerator FireAllProjectiles() {
+        primaryWeapon.CurrentMag--;
+        ZombieHealth hitZombie;
+        for (int shots = primaryWeapon.Projectiles; shots > 0; shots--) {
             if (Physics.Raycast(playerCamera.gameObject.transform.position,
-                playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
-                (new Vector3(UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius),
-                UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius))),
-                out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
+            playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
+            (new Vector3(UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius),
+            UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius))),
+            out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
 
                 if (hit.transform.gameObject.CompareTag("Zombie Head")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
@@ -203,21 +207,10 @@ public class UseWeapon : MonoBehaviour {
                     poolManager.SpawnFromPool(primaryWeapon.BulletHoleSize, hit.point, rot);
                 }
             }
+            yield return null;
         }
-        /*
-        for (int shots = primaryWeapon.Projectiles; shots > 0; shots++) {
-            Vector3 bulletOrigin = playerCamera.gameObject.transform.forward;
-
-            Physics.Raycast
-                (playerCamera.gameObject.transform.position,
-                bulletOrigin + playerCamera.transform.TransformDirection
-                (new Vector3(UnityEngine.Random.Range
-                (-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius), 
-                UnityEngine.Random.Range
-                (-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius))),
-                out RaycastHit hit, primaryWeapon.MaxRange, playerMask);
-        }
-        */
+        firingTime = primaryWeapon.FiringRate;
+        yield break;
     }
     #endregion
     #region NoAmmo
