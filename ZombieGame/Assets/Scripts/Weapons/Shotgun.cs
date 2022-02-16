@@ -21,7 +21,7 @@ public class Shotgun : Weapon
         HeadshotMultiplier = 1.2f;
         Pierce = false;
         MaxRange = 10;
-        Automatic = true;
+        Automatic = false;
         Projectiles = 20;
         BulletSpreadRadius = 0.04f;
         ExplosionRadius = 0;
