@@ -30,6 +30,7 @@ public class UseWeapon : MonoBehaviour {
     private MovePlayer movePlayer;
 
     public float firingTime;
+    public bool canFire;
 
     public bool isReloading;
     public float reloadTimer;
@@ -69,6 +70,7 @@ public class UseWeapon : MonoBehaviour {
         playerMask = ~playerMask;
         primaryWeapon = new Pistol();
         secondaryWeapon = new None();
+        canFire = true;
     }
     #endregion
     #region MonoBehaviour Update()
@@ -175,12 +177,13 @@ public class UseWeapon : MonoBehaviour {
      */
     private void Fire() {
         //if (firingTime > 0) firingTime -= Time.deltaTime;
-        if (Input.GetMouseButtonDown(0) && CanOperate() && primaryWeapon.CurrentMag > 0) { // NOT FULL AUTO
+        if (Input.GetMouseButton(0) && CanOperate() && primaryWeapon.CurrentMag > 0 && canFire) { // NOT FULL AUTO
             FireWeapon = StartCoroutine(FireAllProjectiles());
         }
     }
 
     IEnumerator FireAllProjectiles() {
+        canFire = false;
         primaryWeapon.CurrentMag--;
         ZombieHealth hitZombie;
         for (int shots = primaryWeapon.Projectiles; shots > 0; shots--) {
@@ -208,8 +211,21 @@ public class UseWeapon : MonoBehaviour {
             yield return null;
         }
         yield return new WaitForSeconds(primaryWeapon.FiringRate);
+        StartCoroutine(ResetTrigger());
         yield break;
     }
+
+    IEnumerator ResetTrigger() {
+        if (!primaryWeapon.Automatic) {
+            while (Input.GetMouseButton(0)) {
+                canFire = false;
+                yield return null;
+            }
+        }
+        canFire = true;
+        yield break;
+    }
+
     #endregion
     #region NoAmmo
     /*
@@ -238,11 +254,11 @@ public class UseWeapon : MonoBehaviour {
     }
 
     private int PurchaseCost() {
-        if (!secondaryWeapon.WeaponName.Equals(buyZone.weapon) && !primaryWeapon.WeaponName.Equals(buyZone.weapon)) { 
+        if (!secondaryWeapon.WeaponName.Equals(buyZone.weapon) && !primaryWeapon.WeaponName.Equals(buyZone.weapon)) {
             // if weapon is not currently owned
             return buyZone.cost;
         }
-        else { 
+        else {
             // if weapon is obtained, purchase ammo instead
             return buyZone.ammoCost;
         }
@@ -273,7 +289,7 @@ public class UseWeapon : MonoBehaviour {
             if (PurchaseWeapon != null) {
                 StopCoroutine(PurchaseWeapon);
             }
-                isInteracting = false;
+            isInteracting = false;
         }
     }
 

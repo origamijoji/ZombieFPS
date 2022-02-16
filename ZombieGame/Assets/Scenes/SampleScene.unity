@@ -272,6 +272,144 @@ Transform:
   m_Father: {fileID: 1987548606}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &101204894
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4097036196599247803, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036196633489168, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 963194227}
+    - target: {fileID: 4097036196633489173, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036196633489175, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1987548602}
+    - target: {fileID: 4097036197021728028, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1.2587
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197021728028, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.4852
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197021728028, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197021728028, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.7489
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197021728029, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197021728031, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_text
+      value: Maxim
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197021728031, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_fontSize
+      value: 0.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197021728031, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197279977416, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197279977418, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_text
+      value: 'Magazine Size: 100
+
+        Ammo Capacity: 400
+
+        Damage: 8
+
+        Fire
+        Rate: 750 RPM
+
+        Crit Value: 1.2x
+
+        Weight: Heavy
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197279977419, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.238
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_RootOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873900, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Name
+      value: Maxim Buy Zone
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873900, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873903, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: weapon
+      value: Maxim
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
 --- !u!1 &104284827
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,7 +1363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873903, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: cost
-      value: 100
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873903, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: weapon
@@ -1233,7 +1371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873903, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: ammoCost
-      value: 40
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
@@ -2359,7 +2497,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 99
+  m_text: 999
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2422,7 +2560,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -19.171732, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3879,14 +4017,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   firingTime: 0
+  canFire: 0
   isReloading: 0
   reloadTimer: 0
   isSwitching: 0
   switchTimer: 0
   isInteracting: 0
   interactTimer: 0
-  interactTime: 3
-  buyRange: 8
+  interactTime: 2
+  buyRange: 3
   isLookingAtBuyZone: 0
   whatIsBuyZone:
     serializedVersion: 2
