@@ -7,11 +7,14 @@ public class ZombieHealth : MonoBehaviour
 {
     public float health;
     public Slider healthBar;
+    public RoundManager roundManager;
+    private PoolManager poolManager;
     //private RoundManager roundManager;
 
     private void Awake() {
+        roundManager = GameObject.Find("Round Manager").GetComponent<RoundManager>();
         healthBar = gameObject.GetComponentInChildren<Slider>();
-        //roundManager = GameObject.Find("Round Manager").GetComponent<RoundManager>();
+        poolManager = PoolManager.instance;
     }
 
     void Update()
@@ -31,11 +34,14 @@ public class ZombieHealth : MonoBehaviour
     private void ZombieDeath() {
         if(health <= 0) {
             gameObject.SetActive(false);
-
+            roundManager.ZombieDeath();
+            PrepZombieNextSpawn();
         }
     }
 
     private void PrepZombieNextSpawn() {
-        //stuff here
+        health = roundManager.currentHealth;
+        poolManager.QueueZombie();
+
     }
 }
