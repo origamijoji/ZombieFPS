@@ -5,6 +5,7 @@ using UnityEngine;
 public class Rifle : Weapon {
     public Rifle() {
         WeaponName = "Rifle";
+        Flair = "Full-Auto";
         BulletHoleSize = "Small";
         ReserveAmmo = 80;
         MaxReserveAmmo = 80;
@@ -19,6 +20,7 @@ public class Rifle : Weapon {
         PointMultiplier = 1.1f;
         HeadshotMultiplier = 2f;
         Pierce = false;
+        ClipFed = true;
         MaxRange = 20;
         Automatic = true;
         Projectiles = 1;

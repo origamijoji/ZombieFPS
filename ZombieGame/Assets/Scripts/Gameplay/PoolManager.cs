@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour {
 
-    //The pool class stores a tag, a prefab GameObject, and the size of the pool
     [System.Serializable]
     public class Pool {
         public string tag;
@@ -12,8 +11,6 @@ public class PoolManager : MonoBehaviour {
         public int size;
     }
 
-    //static variables belong to the class rather than a particular instance
-    //singleton pattern ensures there is only one instance of a class with global access
     static PoolManager _instance;
 
     public static PoolManager instance {
@@ -25,40 +22,26 @@ public class PoolManager : MonoBehaviour {
         }
     }
 
-    //List of the different allowed pools
     public List<Pool> pools;
-    //Dictionary takes in string key parameter
-    //Queue is a collection of objects, it takes in a GameObject
     public Dictionary<string, Queue<GameObject>> poolDictionary;
 
-    // Start is called before the first frame update
     void Start() {
-        //poolDictionary variable 
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        //foreach Pool (class) named pool (variable) in pools (list)
         foreach (Pool pool in pools) {
             Queue<GameObject> objectPool = new Queue<GameObject>();
+            Transform parent = GameObject.Find("_" + pool.tag).transform;
 
-            //for loop to create objects on scene
-            //iteration for loop, while i is less than the pool size, increase i
             for (int i = 0; i < pool.size; i++) {
-                //Instantiate 
                 GameObject obj = Instantiate(pool.prefab);
-                //Set object by default to false
                 obj.SetActive(false);
-                //Add the object to the pool
                 objectPool.Enqueue(obj);
+                obj.transform.parent = parent;
             }
-
 
             poolDictionary.Add(pool.tag, objectPool);
         }
     }
-
-    //method to be called in other objects that allows access to the pooled objects
-    //public return type GameObject takes in parameters, tag, position, and rotation
-
 
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation) {
         if (!poolDictionary.ContainsKey(tag)) {
@@ -74,6 +57,22 @@ public class PoolManager : MonoBehaviour {
         poolDictionary[tag].Enqueue(objectToSpawn);
 
         return objectToSpawn;
+    }
+
+    public GameObject SpawnZombie(Vector3 position, Quaternion rotation) {
+
+        GameObject objectToSpawn = poolDictionary["Zombie"].Dequeue();
+
+        objectToSpawn.SetActive(true);
+        objectToSpawn.transform.position = position;
+        objectToSpawn.transform.rotation = rotation;
+
+        return objectToSpawn;
+    }
+
+    public void QueueZombie() {
+        GameObject objectToQueue = gameObject;
+        poolDictionary["Zombie"].Enqueue(objectToQueue);
     }
 
 }

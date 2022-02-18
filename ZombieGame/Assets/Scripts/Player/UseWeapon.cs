@@ -34,6 +34,7 @@ public class UseWeapon : MonoBehaviour {
 
     public bool isReloading;
     public float reloadTimer;
+    public float chamberTimer;
 
     public bool isSwitching;
     public float switchTimer;
@@ -49,7 +50,7 @@ public class UseWeapon : MonoBehaviour {
 
     Coroutine PurchaseWeapon;
     Coroutine FireWeapon;
-    //automatic
+
     //pierce
     //range
     public GameObject noAmmoText;
@@ -108,11 +109,20 @@ public class UseWeapon : MonoBehaviour {
     #region Reload
     /*
      * If player has ammo, is free from actions, doesn't currently have a full magazine, and has reserve ammo start a Reload
+     * 
+     * IF WEAPON IS MAGAZINE FED
      * Get the required amount of ammo needed in the magazine to be at max
      * Set the magazine to the max ammount
      * Subtract the required amount from the reserve ammo
      * If the required amount of ammo is not owned
      * Add all reserve ammo to the magazine, set reserve ammo to 0
+     * 
+     * IF WEAPON IS NOT MAGAZINE FED
+     * Call the open chamber time once starting a reload
+     * Wait reloadSpeed duration
+     * Add 1 bullet to gun
+     * Subtract 1 bullet from reserves
+     * repeat until full
      */
 
     private void ProcessReload() {
@@ -126,20 +136,34 @@ public class UseWeapon : MonoBehaviour {
 
     IEnumerator Reload() {
         isReloading = true;
-        while (isReloading) {
-            reloadTimer = primaryWeapon.ReloadSpeed;
-            yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
-            int ammoRequired = primaryWeapon.MaxMag - primaryWeapon.CurrentMag;
-            if (primaryWeapon.ReserveAmmo > ammoRequired) {
-                primaryWeapon.CurrentMag = primaryWeapon.MaxMag;
-                primaryWeapon.ReserveAmmo -= ammoRequired;
-                isReloading = false;
+        if (primaryWeapon.ClipFed) {
+            while (isReloading) {
+                reloadTimer = primaryWeapon.ReloadSpeed;
+                yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
+                int ammoRequired = primaryWeapon.MaxMag - primaryWeapon.CurrentMag;
+                if (primaryWeapon.ReserveAmmo > ammoRequired) {
+                    primaryWeapon.CurrentMag = primaryWeapon.MaxMag;
+                    primaryWeapon.ReserveAmmo -= ammoRequired;
+                    isReloading = false;
+                }
+                else {
+                    primaryWeapon.CurrentMag += primaryWeapon.ReserveAmmo;
+                    primaryWeapon.ReserveAmmo = 0;
+                    isReloading = false;
+                }
             }
-            else {
-                primaryWeapon.CurrentMag += primaryWeapon.ReserveAmmo;
-                primaryWeapon.ReserveAmmo = 0;
-                isReloading = false;
+        }
+        else if(!primaryWeapon.ClipFed) {
+            chamberTimer = primaryWeapon.ChamberTime;
+            yield return new WaitForSeconds(primaryWeapon.ChamberTime);
+            while(isReloading && primaryWeapon.CurrentMag < primaryWeapon.MaxMag && primaryWeapon.ReserveAmmo > 0) {
+                reloadTimer = primaryWeapon.ReloadSpeed;
+                yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
+                primaryWeapon.CurrentMag++;
+                primaryWeapon.ReserveAmmo--;
+                yield return null;
             }
+            isReloading = false;
         }
         yield break;
     }
@@ -323,14 +347,21 @@ public class UseWeapon : MonoBehaviour {
         }
         else { //if weapon is obtained, purchase ammo instead
             points.RemovePoints(buyZone.ammoCost);
+            Debug.Log("Ammo Purchased");
             if (primaryWeapon.WeaponName == buyZone.weapon) {
-                Debug.Log("Ammo Purchased");
                 primaryWeapon.ReserveAmmo = primaryWeapon.MaxReserveAmmo;
             }
             else { //if weapon is not in main hand, do nothing
-                return;
+                secondaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
             }
         }
+    }
+
+    #endregion
+    #region Debug
+    public void SpawnWeapon(string weaponType) {
+        Type weapon = Type.GetType(weaponType);
+        primaryWeapon = (Weapon)Activator.CreateInstance(weapon);
     }
     #endregion
 }

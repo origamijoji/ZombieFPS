@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class DebugScript : MonoBehaviour
 {
-    public Transform player;
+    public GameObject player;
+    public Points points;
+    public UseWeapon useWeapon;
+    private void Awake() {
+        points = player.GetComponent<Points>();
+        useWeapon = player.GetComponent<UseWeapon>();
+    }
 
     private void Update()
     {
-
-        if(Input.GetKeyDown(KeyCode.R)) {
-            Debug.Log("test");
-            player.position = gameObject.transform.position;
-            player.rotation = gameObject.transform.rotation;
-        }
+        if (Input.GetKeyDown(KeyCode.Escape)) { points.AddPoints(100); }
+        if (Input.GetKeyDown(KeyCode.F1)) { useWeapon.SpawnWeapon("Pistol"); }
+        if (Input.GetKeyDown(KeyCode.F2)) { useWeapon.SpawnWeapon("Rifle"); }
+        if (Input.GetKeyDown(KeyCode.F3)) { useWeapon.SpawnWeapon("Sniper"); }
+        if (Input.GetKeyDown(KeyCode.F4)) { useWeapon.SpawnWeapon("Revolver"); }
+        if (Input.GetKeyDown(KeyCode.F5)) { }
+        if (Input.GetKeyDown(KeyCode.F6)) { useWeapon.SpawnWeapon("Maxim"); }
+        if (Input.GetKeyDown(KeyCode.F7)) { }
+        if (Input.GetKeyDown(KeyCode.F8)) { }
+        if (Input.GetKeyDown(KeyCode.F9)) { }
     }
 }

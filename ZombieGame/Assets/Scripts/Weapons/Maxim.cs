@@ -6,6 +6,7 @@ public class Maxim : Weapon
 {
     public Maxim() {
         WeaponName = "Maxim";
+        Flair = "Spray n' Pray";
         BulletHoleSize = "Small";
         ReserveAmmo = 400;
         MaxReserveAmmo = 400;
@@ -20,10 +21,11 @@ public class Maxim : Weapon
         PointMultiplier = 1.3f;
         HeadshotMultiplier = 1.2f;
         Pierce = false;
+        ClipFed = true;
         MaxRange = 10;
         Automatic = true;
         Projectiles = 1;
-        BulletSpreadRadius = 0.08f;
+        BulletSpreadRadius = 0.07f;
         ExplosionRadius = 0;
     }
 }

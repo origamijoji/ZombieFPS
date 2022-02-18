@@ -5,19 +5,21 @@ using UnityEngine;
 public class Sniper : Weapon {
     public Sniper() {
         WeaponName = "Sniper";
+        Flair = "Bolt-Action";
         BulletHoleSize = "Big";
         ReserveAmmo = 20;
         MaxReserveAmmo = 20;
         CurrentMag = 5;
         MaxMag = 5;
-        DrawTime = 3f;
+        DrawTime = 2f;
         BulletDamage = 50;
         DamageFalloff = 0;
-        ReloadSpeed = 6f;
-        FiringRate = 4f;
+        ReloadSpeed = 4f;
+        FiringRate = 3f;
         PointValue = 10;
         HeadshotMultiplier = 5f;
         Pierce = true;
+        ClipFed = true;
         MaxRange = 50;
         Automatic = false;
         Projectiles = 1;
