@@ -37,10 +37,12 @@ public class ZombieHealth : MonoBehaviour {
 
     private void PrepZombieNextSpawn() {
         health = roundManager.currentHealth;
+        healthBar.maxValue = health;
         roundManager.QueueZombie(gameObject);
     }
 
     private void UpdateStats() {
         health = roundManager.currentHealth;
+        healthBar.maxValue = health;
     }
 }

@@ -91,6 +91,15 @@ public class UseWeapon : MonoBehaviour {
             mouseLook.LockMouseInput(false);
             movePlayer.LockMovement(false);
         }
+
+        if(Input.GetMouseButton(1)) {
+            mouseLook.ZoomWeapon(primaryWeapon.ZoomValue);
+            movePlayer.ZoomedIn(primaryWeapon.ZoomMoveSpeed);
+        }
+        else {
+            mouseLook.UnZoom();
+            movePlayer.UnZoom();
+        }
     }
     #endregion
     #region Inspector

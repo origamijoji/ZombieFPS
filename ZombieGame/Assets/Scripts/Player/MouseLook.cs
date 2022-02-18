@@ -10,11 +10,13 @@ public class MouseLook : MonoBehaviour {
     public float sensX;
     [Tooltip("Mouse Y sensitivity")]
     public float sensY;
+    public float defaultFOV = 60f;
 
     private float mouseX;
     private float mouseY;
 
     private float lockValue;
+    private float zoomValue;
     #endregion
     #region References
     [Header("~ References <3")]
@@ -34,8 +36,8 @@ public class MouseLook : MonoBehaviour {
         mouseX = Input.GetAxisRaw("Mouse X");
         mouseY = Input.GetAxisRaw("Mouse Y");
 
-        yRotation += mouseX * sensX * multiplier * lockValue;
-        xRotation -= mouseY * sensY * multiplier * lockValue;
+        yRotation += mouseX * sensX * multiplier * lockValue * zoomValue;
+        xRotation -= mouseY * sensY * multiplier * lockValue * zoomValue;
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
@@ -50,6 +52,16 @@ public class MouseLook : MonoBehaviour {
         else {
             lockValue = 1;
         }
+    }
+
+    public void ZoomWeapon(float value) {
+        playerCamera.fieldOfView = value;
+        zoomValue = 0.3f;
+    }
+
+    public void UnZoom() {
+        playerCamera.fieldOfView = defaultFOV;
+        zoomValue = 1;
     }
 }
 

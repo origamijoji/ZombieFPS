@@ -27,6 +27,8 @@ public abstract class Weapon {
     public float BulletSpreadRadius { get; set; } // Radius of inaccuracy
     public float ExplosionRadius { get; set; } // Explosion radius of hit.point
     public float DamageFalloffRange {get; set; } // Range bullet will start to lose damage
+    public float ZoomValue { get; set; } // FOV while zoomed in (60 is default)
+    public float ZoomMoveSpeed { get; set; } // Fraction of moving speed while zoomed in
 
 }
 

@@ -19,7 +19,7 @@ public class RoundManager : MonoBehaviour {
     public int zombiesThisRound;
     public int zombiesSpawned;
     public int zombiesRemaining;
-    private bool roundActive;
+    public bool roundActive;
 
     public float inbetweenRoundTime;
     public float spawnTime;
@@ -53,7 +53,6 @@ public class RoundManager : MonoBehaviour {
         spawnLocations = GameObject.FindGameObjectsWithTag("Window");
     }
     private void Start() {
-        NextRound();
 
         foreach (Zombies zombie in zombies) {
             Transform parent = GameObject.Find("_" + zombie.tag).transform;
@@ -67,6 +66,13 @@ public class RoundManager : MonoBehaviour {
         }
         StartCoroutine(StartNextRound());
     }
+
+    private void Update() {
+        if(timeToNextSpawn > 0) {
+            timeToNextSpawn -= Time.deltaTime;
+        }
+    }
+
     public void ZombieDeath() {
         zombiesRemaining--;
         if (zombiesRemaining == 0) {
@@ -77,8 +83,6 @@ public class RoundManager : MonoBehaviour {
     public void ZombieSpawned() {
         zombiesSpawned++;
     }
-
-
 
     public IEnumerator SpawnHorde() {
         while (roundActive) {

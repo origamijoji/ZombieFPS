@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Infinity : Weapon
-{
+public class Infinity : Weapon {
     public Infinity() {
         WeaponName = "Infinity";
         Flair = "Null-Reference Error";
@@ -27,5 +26,7 @@ public class Infinity : Weapon
         Projectiles = 20;
         BulletSpreadRadius = 0f;
         ExplosionRadius = 0;
+        ZoomValue = 70;
+        ZoomMoveSpeed = 2f;
     }
 }
