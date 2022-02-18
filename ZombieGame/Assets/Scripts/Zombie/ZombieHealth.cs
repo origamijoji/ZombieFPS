@@ -3,22 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ZombieHealth : MonoBehaviour
-{
+public class ZombieHealth : MonoBehaviour {
     public float health;
     public Slider healthBar;
     public RoundManager roundManager;
-    private PoolManager poolManager;
-    //private RoundManager roundManager;
 
     private void Awake() {
-        roundManager = GameObject.Find("Round Manager").GetComponent<RoundManager>();
         healthBar = gameObject.GetComponentInChildren<Slider>();
-        poolManager = PoolManager.instance;
+        roundManager = RoundManager.instance;
+        RoundManager.NewRound += UpdateStats;
     }
 
-    void Update()
-    {
+    void Update() {
         healthBar.value = health;
     }
 
@@ -28,11 +24,11 @@ public class ZombieHealth : MonoBehaviour
     }
     public void TakeDamage(float dmg, float multiplier) {
         health -= dmg * multiplier;
-            ZombieDeath();
+        ZombieDeath();
     }
 
     private void ZombieDeath() {
-        if(health <= 0) {
+        if (health <= 0) {
             gameObject.SetActive(false);
             roundManager.ZombieDeath();
             PrepZombieNextSpawn();
@@ -41,7 +37,10 @@ public class ZombieHealth : MonoBehaviour
 
     private void PrepZombieNextSpawn() {
         health = roundManager.currentHealth;
-        poolManager.QueueZombie();
+        roundManager.QueueZombie(gameObject);
+    }
 
+    private void UpdateStats() {
+        health = roundManager.currentHealth;
     }
 }

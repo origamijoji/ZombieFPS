@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour {
+public abstract class Weapon {
     public string WeaponName { get; set; } // String name of weapon
     public string Flair { get; set; } // Extra text above weapon
     public string BulletHoleSize { get; set; } // Size of bullet hole called by PoolManager

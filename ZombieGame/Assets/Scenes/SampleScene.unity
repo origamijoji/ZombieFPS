@@ -544,9 +544,6 @@ MonoBehaviour:
   - tag: Small
     prefab: {fileID: 6353493990331009882}
     size: 40
-  - tag: Zombie
-    prefab: {fileID: 3482923679347958706, guid: 5a970bbba725df144b8f92673c8eb922, type: 3}
-    size: 3
   - tag: Very Small
     prefab: {fileID: 5023944548857395736, guid: fb03cb8ad1b9b8e4d947cda50db30573, type: 3}
     size: 30
@@ -3766,15 +3763,18 @@ MonoBehaviour:
   zombiesThisRound: 0
   zombiesSpawned: 0
   zombiesRemaining: 0
+  inbetweenRoundTime: 5
   spawnTime: 2
   currentHealth: 0
   currentSpeed: 0
-  nextHealth: 0
-  nextSpeed: 0
   zombieRate: 0.15
   healthRate: 100
   speedRate: 0.2
   spawnRate: 0.5
+  zombies:
+  - tag: Zombie
+    prefab: {fileID: 3482923679347958706, guid: 5a970bbba725df144b8f92673c8eb922, type: 3}
+    size: 10
   timeToNextSpawn: 0
   spawnLocations: []
   previousSpawnLocation: {fileID: 0}
@@ -4776,8 +4776,6 @@ MonoBehaviour:
   secondary: 
   currentMagazine: 0
   reserveAmmo: 0
-  primaryWeapon: {fileID: 0}
-  secondaryWeapon: {fileID: 0}
   playerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -5416,13 +5414,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie
       objectReference: {fileID: 0}
-    - target: {fileID: 3482923679473710489, guid: 5a970bbba725df144b8f92673c8eb922, type: 3}
-      propertyPath: m_AnchorMax.x
+    - target: {fileID: 3482923679347958706, guid: 5a970bbba725df144b8f92673c8eb922, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3482923679473710489, guid: 5a970bbba725df144b8f92673c8eb922, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3482923679473710489, guid: 5a970bbba725df144b8f92673c8eb922, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a970bbba725df144b8f92673c8eb922, type: 3}
