@@ -96,10 +96,12 @@ public class UseWeapon : MonoBehaviour {
         if (Input.GetMouseButton(1)) {
             mouseLook.ZoomWeapon(primaryWeapon.ZoomValue);
             movePlayer.ZoomedIn(primaryWeapon.ZoomMoveSpeed);
+            weaponAnimator.MoveToFace();
         }
         else {
             mouseLook.UnZoom();
             movePlayer.UnZoom();
+            weaponAnimator.MoveToHand();
         }
     }
     #endregion
@@ -148,7 +150,7 @@ public class UseWeapon : MonoBehaviour {
         isReloading = true;
         if (primaryWeapon.ClipFed) {
             while (isReloading) {
-                weaponAnimator.Reload();
+                weaponAnimator.Reload(primaryWeapon.ReloadSpeed);
                 reloadTimer = primaryWeapon.ReloadSpeed;
                 yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
                 int ammoRequired = primaryWeapon.MaxMag - primaryWeapon.CurrentMag;
@@ -270,11 +272,9 @@ public class UseWeapon : MonoBehaviour {
     private void NoAmmo() {
         if (primaryWeapon.ReserveAmmo == 0 && primaryWeapon.CurrentMag == 0) {
             noAmmoText.SetActive(true);
-            weaponAnimator.IsEmpty(true);
         }
         else {
             noAmmoText.SetActive(false); 
-            weaponAnimator.IsEmpty(true);
         }
     }
     #endregion
