@@ -15,7 +15,7 @@ public class Pistol : Weapon {
         BulletDamage = 20;
         DamageFalloff = 10;
         ReloadSpeed = 1f;
-        FiringRate = 0.5f;
+        FiringRate = 0.35f;
         PointValue = 5;
         PointMultiplier = 1.4f;
         HeadshotMultiplier = 1.25f;

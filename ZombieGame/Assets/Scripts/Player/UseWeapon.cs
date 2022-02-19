@@ -28,6 +28,7 @@ public class UseWeapon : MonoBehaviour {
     private PoolManager poolManager;
     private Points points;
     private MovePlayer movePlayer;
+    private WeaponAnimation weaponAnimator;
 
     public float firingTime;
     public bool canFire;
@@ -62,7 +63,7 @@ public class UseWeapon : MonoBehaviour {
         mouseLook = gameObject.GetComponent<MouseLook>();
         playerCamera = mouseLook.playerCamera;
         points = gameObject.GetComponent<Points>();
-
+        weaponAnimator = playerCamera.GetComponentInChildren<WeaponAnimation>();
         //global components
         poolManager = PoolManager.instance;
     }
@@ -92,7 +93,7 @@ public class UseWeapon : MonoBehaviour {
             movePlayer.LockMovement(false);
         }
 
-        if(Input.GetMouseButton(1)) {
+        if (Input.GetMouseButton(1)) {
             mouseLook.ZoomWeapon(primaryWeapon.ZoomValue);
             movePlayer.ZoomedIn(primaryWeapon.ZoomMoveSpeed);
         }
@@ -147,6 +148,7 @@ public class UseWeapon : MonoBehaviour {
         isReloading = true;
         if (primaryWeapon.ClipFed) {
             while (isReloading) {
+                weaponAnimator.Reload();
                 reloadTimer = primaryWeapon.ReloadSpeed;
                 yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
                 int ammoRequired = primaryWeapon.MaxMag - primaryWeapon.CurrentMag;
@@ -162,10 +164,10 @@ public class UseWeapon : MonoBehaviour {
                 }
             }
         }
-        else if(!primaryWeapon.ClipFed) {
+        else if (!primaryWeapon.ClipFed) {
             chamberTimer = primaryWeapon.ChamberTime;
             yield return new WaitForSeconds(primaryWeapon.ChamberTime);
-            while(isReloading && primaryWeapon.CurrentMag < primaryWeapon.MaxMag && primaryWeapon.ReserveAmmo > 0) {
+            while (isReloading && primaryWeapon.CurrentMag < primaryWeapon.MaxMag && primaryWeapon.ReserveAmmo > 0) {
                 reloadTimer = primaryWeapon.ReloadSpeed;
                 yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
                 primaryWeapon.CurrentMag++;
@@ -218,6 +220,7 @@ public class UseWeapon : MonoBehaviour {
     IEnumerator FireAllProjectiles() {
         canFire = false;
         primaryWeapon.CurrentMag--;
+        weaponAnimator.Fire();
         ZombieHealth hitZombie;
         for (int shots = primaryWeapon.Projectiles; shots > 0; shots--) {
             if (Physics.Raycast(playerCamera.gameObject.transform.position,
@@ -267,8 +270,12 @@ public class UseWeapon : MonoBehaviour {
     private void NoAmmo() {
         if (primaryWeapon.ReserveAmmo == 0 && primaryWeapon.CurrentMag == 0) {
             noAmmoText.SetActive(true);
+            weaponAnimator.IsEmpty(true);
         }
-        else { noAmmoText.SetActive(false); }
+        else {
+            noAmmoText.SetActive(false); 
+            weaponAnimator.IsEmpty(true);
+        }
     }
     #endregion
     #region Return Methods
