@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour {
+public abstract class Weapon {
     public string WeaponName { get; set; } // String name of weapon
     public string Flair { get; set; } // Extra text above weapon
     public string BulletHoleSize { get; set; } // Size of bullet hole called by PoolManager
@@ -27,6 +27,8 @@ public abstract class Weapon : MonoBehaviour {
     public float BulletSpreadRadius { get; set; } // Radius of inaccuracy
     public float ExplosionRadius { get; set; } // Explosion radius of hit.point
     public float DamageFalloffRange {get; set; } // Range bullet will start to lose damage
+    public float ZoomValue { get; set; } // FOV while zoomed in (60 is default)
+    public float ZoomMoveSpeed { get; set; } // Fraction of moving speed while zoomed in
 
 }
 

@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Maxim : Weapon
-{
+public class Maxim : Weapon {
     public Maxim() {
         WeaponName = "Maxim";
         Flair = "Spray n' Pray";
@@ -27,5 +26,7 @@ public class Maxim : Weapon
         Projectiles = 1;
         BulletSpreadRadius = 0.07f;
         ExplosionRadius = 0;
+        ZoomValue = 50;
+        ZoomMoveSpeed = 0.3f;
     }
 }

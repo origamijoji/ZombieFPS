@@ -17,6 +17,7 @@ public class None : Weapon {
         ReloadSpeed = 0;
         FiringRate = 0;
         PointValue = 0;
+        PointMultiplier = 0f;
         HeadshotMultiplier = 0;
         Pierce = false;
         ClipFed = false;
@@ -25,6 +26,8 @@ public class None : Weapon {
         Projectiles = 0;
         BulletSpreadRadius = 0;
         ExplosionRadius = 0;
+        ZoomValue = 0;
+        ZoomMoveSpeed = 0f;
     }
 
 }

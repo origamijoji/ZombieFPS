@@ -18,6 +18,7 @@ public class MovePlayer : MonoBehaviour {
     private float zInput;
     public bool isGrounded = true;
 
+    private float zoomMultiplier;
     private float lockMultiplier;
 
     void Start() {
@@ -38,7 +39,7 @@ public class MovePlayer : MonoBehaviour {
         zInput = Input.GetAxisRaw("Vertical");
     }
     private void ApplyMovement() {
-        rb.AddForce(moveDir.normalized * moveSpeed * lockMultiplier, ForceMode.Acceleration);
+        rb.AddForce(moveDir.normalized * moveSpeed * lockMultiplier * zoomMultiplier, ForceMode.Acceleration);
     }
 
     private void DragControl() {
@@ -58,5 +59,11 @@ public class MovePlayer : MonoBehaviour {
         else {
             lockMultiplier = 1;
         }
+    }
+    public void ZoomedIn(float value) {
+        zoomMultiplier = value;
+    }
+    public void UnZoom() {
+        zoomMultiplier = 1;
     }
 }

@@ -59,20 +59,5 @@ public class PoolManager : MonoBehaviour {
         return objectToSpawn;
     }
 
-    public GameObject SpawnZombie(Vector3 position, Quaternion rotation) {
-
-        GameObject objectToSpawn = poolDictionary["Zombie"].Dequeue();
-
-        objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
-
-        return objectToSpawn;
-    }
-
-    public void QueueZombie() {
-        GameObject objectToQueue = gameObject;
-        poolDictionary["Zombie"].Enqueue(objectToQueue);
-    }
 
 }

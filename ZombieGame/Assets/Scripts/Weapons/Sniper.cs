@@ -17,6 +17,7 @@ public class Sniper : Weapon {
         ReloadSpeed = 4f;
         FiringRate = 3f;
         PointValue = 10;
+        PointMultiplier = 1f;
         HeadshotMultiplier = 5f;
         Pierce = true;
         ClipFed = true;
@@ -25,5 +26,7 @@ public class Sniper : Weapon {
         Projectiles = 1;
         BulletSpreadRadius = 0.001f;
         ExplosionRadius = 0;
+        ZoomValue = 20;
+        ZoomMoveSpeed = 0.3f;
     }
 }

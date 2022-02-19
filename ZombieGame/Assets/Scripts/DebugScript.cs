@@ -19,9 +19,9 @@ public class DebugScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F2)) { useWeapon.SpawnWeapon("Rifle"); }
         if (Input.GetKeyDown(KeyCode.F3)) { useWeapon.SpawnWeapon("Sniper"); }
         if (Input.GetKeyDown(KeyCode.F4)) { useWeapon.SpawnWeapon("Revolver"); }
-        if (Input.GetKeyDown(KeyCode.F5)) { }
+        if (Input.GetKeyDown(KeyCode.F5)) { useWeapon.SpawnWeapon("Shotgun"); }
         if (Input.GetKeyDown(KeyCode.F6)) { useWeapon.SpawnWeapon("Maxim"); }
-        if (Input.GetKeyDown(KeyCode.F7)) { }
+        if (Input.GetKeyDown(KeyCode.F7)) { useWeapon.SpawnWeapon("Infinity"); }
         if (Input.GetKeyDown(KeyCode.F8)) { }
         if (Input.GetKeyDown(KeyCode.F9)) { }
     }

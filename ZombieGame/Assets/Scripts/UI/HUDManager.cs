@@ -16,6 +16,7 @@ public class HUDManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI pointText;
     [SerializeField] private TextMeshProUGUI transactionText;
     [SerializeField] private TextMeshProUGUI purchaseText;
+    [SerializeField] private TextMeshProUGUI roundText;
 
     [SerializeField] private GameObject reloading;
     private Slider reloadingSlider;
@@ -29,6 +30,7 @@ public class HUDManager : MonoBehaviour {
     [SerializeField] private GameObject chambering;
     private Slider chamberingSlider;
 
+    private RoundManager roundmanager;
 
     private void Awake() {
         //player components
@@ -40,6 +42,8 @@ public class HUDManager : MonoBehaviour {
         switchingSlider = switching.GetComponentInChildren<Slider>();
         interactingSlider = interacting.GetComponentInChildren<Slider>();
         chamberingSlider = chambering.GetComponentInChildren<Slider>();
+        //global components
+        roundmanager = RoundManager.instance;
     }
 
     void Update() {
@@ -97,6 +101,7 @@ public class HUDManager : MonoBehaviour {
         }
         else { purchaseText.gameObject.SetActive(false); }
 
+        roundText.text = "Round \n" + roundmanager.currentRound;
     }
 
 }
