@@ -25,6 +25,7 @@ public class MouseLook : MonoBehaviour {
     [Tooltip("Player orientation object, child of player")]
     public Transform orientation;
 
+
     private float multiplier = 0.01f;
     private float xRotation;
     private float yRotation;
