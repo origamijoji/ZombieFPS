@@ -28,7 +28,7 @@ public class UseWeapon : MonoBehaviour {
     private PoolManager poolManager;
     private Points points;
     private MovePlayer movePlayer;
-    private WeaponAnimation weaponAnimator;
+    private WeaponManager weaponManager;
 
     public float firingTime;
     public bool canFire;
@@ -49,6 +49,8 @@ public class UseWeapon : MonoBehaviour {
     private GiveGun buyZone;
     public LayerMask whatIsBuyZone;
 
+    public bool isZoomed;
+
     Coroutine PurchaseWeapon;
     Coroutine FireWeapon;
 
@@ -63,15 +65,16 @@ public class UseWeapon : MonoBehaviour {
         mouseLook = gameObject.GetComponent<MouseLook>();
         playerCamera = mouseLook.playerCamera;
         points = gameObject.GetComponent<Points>();
-        weaponAnimator = playerCamera.GetComponentInChildren<WeaponAnimation>();
+        weaponManager = playerCamera.GetComponentInParent<WeaponManager>();
         //global components
         poolManager = PoolManager.instance;
     }
 
     private void Start() {
         playerMask = ~playerMask;
-        primaryWeapon = new Pistol();
+        primaryWeapon = new M1911();
         secondaryWeapon = new None();
+        weaponManager.SetActiveWeapon(primaryWeapon.WeaponName);
         canFire = true;
     }
     #endregion
@@ -94,14 +97,16 @@ public class UseWeapon : MonoBehaviour {
         }
 
         if (Input.GetMouseButton(1)) {
+            isZoomed = true;
             mouseLook.ZoomWeapon(primaryWeapon.ZoomValue);
             movePlayer.ZoomedIn(primaryWeapon.ZoomMoveSpeed);
-            weaponAnimator.MoveToFace();
+            weaponManager.currentAnimator.MoveToFace();
         }
         else {
+            isZoomed = false;
             mouseLook.UnZoom();
             movePlayer.UnZoom();
-            weaponAnimator.MoveToHand();
+            weaponManager.currentAnimator.MoveToHand();
         }
     }
     #endregion
@@ -150,7 +155,7 @@ public class UseWeapon : MonoBehaviour {
         isReloading = true;
         if (primaryWeapon.ClipFed) {
             while (isReloading) {
-                weaponAnimator.Reload(primaryWeapon.ReloadSpeed);
+                weaponManager.currentAnimator.Reload(primaryWeapon.ReloadSpeed);
                 reloadTimer = primaryWeapon.ReloadSpeed;
                 yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
                 int ammoRequired = primaryWeapon.MaxMag - primaryWeapon.CurrentMag;
@@ -198,6 +203,7 @@ public class UseWeapon : MonoBehaviour {
     public IEnumerator Switch() {
         isSwitching = true;
         switchTimer = secondaryWeapon.DrawTime;
+        StartCoroutine(weaponManager.SwitchWeapons(secondaryWeapon.WeaponName, secondaryWeapon.DrawTime));
         yield return new WaitForSeconds(secondaryWeapon.DrawTime);
         Weapon temp = secondaryWeapon;
         secondaryWeapon = primaryWeapon;
@@ -222,7 +228,7 @@ public class UseWeapon : MonoBehaviour {
     IEnumerator FireAllProjectiles() {
         canFire = false;
         primaryWeapon.CurrentMag--;
-        weaponAnimator.Fire();
+        weaponManager.currentAnimator.Fire();
         ZombieHealth hitZombie;
         for (int shots = primaryWeapon.Projectiles; shots > 0; shots--) {
             if (Physics.Raycast(playerCamera.gameObject.transform.position,
@@ -274,7 +280,7 @@ public class UseWeapon : MonoBehaviour {
             noAmmoText.SetActive(true);
         }
         else {
-            noAmmoText.SetActive(false); 
+            noAmmoText.SetActive(false);
         }
     }
     #endregion
@@ -355,21 +361,18 @@ public class UseWeapon : MonoBehaviour {
                 Weapon temp = secondaryWeapon;
                 secondaryWeapon = primaryWeapon;
                 primaryWeapon = temp;
+                weaponManager.SetActiveWeapon(buyZone.weapon);
             }
             else { //if player has two weapons, make their current weapon the purchassed weapon
                 Debug.Log("Primary Purchased");
                 primaryWeapon = (Weapon)Activator.CreateInstance(buyZone.weaponType);
+                weaponManager.SetActiveWeapon(buyZone.weapon);
             }
         }
         else { //if weapon is obtained, purchase ammo instead
             points.RemovePoints(buyZone.ammoCost);
             Debug.Log("Ammo Purchased");
-            if (primaryWeapon.WeaponName == buyZone.weapon) {
-                primaryWeapon.ReserveAmmo = primaryWeapon.MaxReserveAmmo;
-            }
-            else { //if weapon is not in main hand, do nothing
-                secondaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
-            }
+            primaryWeapon.ReserveAmmo = primaryWeapon.MaxReserveAmmo;
         }
     }
 

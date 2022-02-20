@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rifle : Weapon {
-    public Rifle() {
-        WeaponName = "Rifle";
+public class M4C : Weapon {
+    public M4C() {
+        WeaponName = "M4C";
         Flair = "Full-Auto";
         BulletHoleSize = "Small";
         ReserveAmmo = 80;

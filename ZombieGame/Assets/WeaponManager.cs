@@ -10,31 +10,35 @@ public class WeaponManager : MonoBehaviour {
         public GameObject model;
         public WeaponAnimation wepAni;
     }
+    public WeaponAnimation currentAnimator;
 
     public List<WeaponModel> weapons;
 
-    void Update() {
-
-    }
-    private void Start() {
-        foreach(WeaponModel weapon in weapons) {
-            weapon.wepAni = gameObject.GetComponent<WeaponAnimation>();
-        }
-    }
-
     public void SetActiveWeapon(string name) {
-
-        switch (name) {
-            case "M1911":
-
-                break;
+        DisableAllWeapons();
+        foreach (WeaponModel weapon in weapons) {
+            if(weapon.name == name) {
+                weapon.model.SetActive(true);
+                currentAnimator = weapon.wepAni;
+            }
         }
     }
 
-    //public WeaponAnimation currentWeaponAnimator() {
-        
-    //}
+    public WeaponAnimation CurrentWeaponAnimator() {
+        return currentAnimator;
+    }
+
+    public IEnumerator SwitchWeapons(string newWeapon, float switchTime) {
+        DisableAllWeapons();
+        yield return new WaitForSeconds(switchTime);
+        SetActiveWeapon(newWeapon);
+        yield break;
+    }
 
     private void DisableAllWeapons() {
+        foreach(WeaponModel weapon in weapons) {
+            Debug.Log(weapon.name + " disabled");
+            weapon.model.SetActive(false);
+        }
     }
 }

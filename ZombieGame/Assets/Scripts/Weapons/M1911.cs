@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pistol : Weapon {
-    public Pistol() {
-        WeaponName = "Pistol";
+public class M1911 : Weapon {
+    public M1911() {
+        WeaponName = "M1911";
         Flair = "Standard Issue";
         BulletHoleSize = "Small";
         ReserveAmmo = 42;

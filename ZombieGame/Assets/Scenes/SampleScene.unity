@@ -1040,7 +1040,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873903, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: weapon
-      value: Pistol
+      value: M1911
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873903, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: ammoCost
@@ -2954,6 +2954,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2203334285627194915, guid: aea91a488628a034fbcef811fff05e29, type: 3}
   m_PrefabInstance: {fileID: 2203334284556613154}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1079035906 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2203334285627194912, guid: aea91a488628a034fbcef811fff05e29, type: 3}
+  m_PrefabInstance: {fileID: 2203334284556613154}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079035904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c5dbebff536eb84ab6989e49900bb2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1122196185
 GameObject:
   m_ObjectHideFlags: 0
@@ -3012,13 +3023,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f712d690b967a154984da6c392996a13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentAnimator: {fileID: 0}
   weapons:
   - name: M4C
     model: {fileID: 1079035904}
-    wepAni: {fileID: 0}
+    wepAni: {fileID: 1079035906}
   - name: M1911
     model: {fileID: 1396895247}
-    wepAni: {fileID: 0}
+    wepAni: {fileID: 1396895248}
 --- !u!1001 &1124458204
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4118,6 +4130,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5408201382125405181, guid: 59ac1ca68b399824aa4db800af4c4555, type: 3}
   m_PrefabInstance: {fileID: 3745760330670155446}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1396895248 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8716250525269796172, guid: 59ac1ca68b399824aa4db800af4c4555, type: 3}
+  m_PrefabInstance: {fileID: 3745760330670155446}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1396895247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c5dbebff536eb84ab6989e49900bb2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1471614238 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4097036197660873899, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
@@ -4385,6 +4408,7 @@ MonoBehaviour:
   transactionText: {fileID: 1247867602}
   purchaseText: {fileID: 1796980119}
   roundText: {fileID: 1857361335}
+  crosshair: {fileID: 1473432762}
   reloading: {fileID: 680471427}
   switching: {fileID: 776486212}
   interacting: {fileID: 1009056712}
@@ -5291,6 +5315,7 @@ MonoBehaviour:
   whatIsBuyZone:
     serializedVersion: 2
     m_Bits: 512
+  isZoomed: 0
   noAmmoText: {fileID: 1258876320}
 --- !u!114 &1987548611
 MonoBehaviour:
@@ -5878,7 +5903,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2203334285627194914, guid: aea91a488628a034fbcef811fff05e29, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2203334285627194915, guid: aea91a488628a034fbcef811fff05e29, type: 3}
       propertyPath: m_RootOrder
@@ -6499,11 +6524,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873900, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_Name
-      value: Rifle Buy Zone
+      value: M4C Buy Zone
       objectReference: {fileID: 0}
     - target: {fileID: 4097036197660873900, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873900, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097036197660873903, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
+      propertyPath: weapon
+      value: M4C
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff4fa284b2dd54f42a18cbf634503983, type: 3}
