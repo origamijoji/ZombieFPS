@@ -26,7 +26,12 @@ public class WeaponAnimation : MonoBehaviour {
         }
     }
 
+    private void OnDisable() {
+        flash.gameObject.SetActive(false);
+    }
+
     public void Fire(float rate) {
+        flash.gameObject.SetActive(true);
         float mult = (fireTime / rate) * snappiness;
         ani.SetFloat("fireMultiplier", mult);
         ani.SetTrigger("Fire");

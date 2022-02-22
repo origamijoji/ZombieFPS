@@ -177,6 +177,7 @@ public class UseWeapon : MonoBehaviour {
             chamberTimer = primaryWeapon.ChamberTime;
             yield return new WaitForSeconds(primaryWeapon.ChamberTime);
             while (isReloading && primaryWeapon.CurrentMag < primaryWeapon.MaxMag && primaryWeapon.ReserveAmmo > 0) {
+                weaponManager.currentAnimator.Reload(primaryWeapon.ReloadSpeed);
                 reloadTimer = primaryWeapon.ReloadSpeed;
                 yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
                 primaryWeapon.CurrentMag++;

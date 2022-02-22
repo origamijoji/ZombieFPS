@@ -15,8 +15,8 @@ public class DebugScript : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) { points.AddPoints(100); }
-        if (Input.GetKeyDown(KeyCode.F1)) { useWeapon.SpawnWeapon("M1911"); }
-        if (Input.GetKeyDown(KeyCode.F2)) { useWeapon.SpawnWeapon("Rifle"); }
+        if (Input.GetKeyDown(KeyCode.F1)) { useWeapon.SpawnWeapon("Pistol"); }
+        if (Input.GetKeyDown(KeyCode.F2)) { useWeapon.SpawnWeapon("Carbine"); }
         if (Input.GetKeyDown(KeyCode.F3)) { useWeapon.SpawnWeapon("Sniper"); }
         if (Input.GetKeyDown(KeyCode.F4)) { useWeapon.SpawnWeapon("Revolver"); }
         if (Input.GetKeyDown(KeyCode.F5)) { useWeapon.SpawnWeapon("Shotgun"); }
