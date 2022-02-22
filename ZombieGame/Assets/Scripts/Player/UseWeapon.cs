@@ -29,6 +29,7 @@ public class UseWeapon : MonoBehaviour {
     private Points points;
     private MovePlayer movePlayer;
     private WeaponManager weaponManager;
+    private TrailRenderer trailRenderer;
 
     public float firingTime;
     public bool canFire;
@@ -66,13 +67,14 @@ public class UseWeapon : MonoBehaviour {
         playerCamera = mouseLook.playerCamera;
         points = gameObject.GetComponent<Points>();
         weaponManager = playerCamera.GetComponentInParent<WeaponManager>();
+        trailRenderer = gameObject.GetComponent<TrailRenderer>();
         //global components
         poolManager = PoolManager.instance;
     }
 
     private void Start() {
         playerMask = ~playerMask;
-        primaryWeapon = new M1911();
+        primaryWeapon = new Pistol();
         secondaryWeapon = new None();
         weaponManager.SetActiveWeapon(primaryWeapon.WeaponName);
         canFire = true;
@@ -228,23 +230,24 @@ public class UseWeapon : MonoBehaviour {
     IEnumerator FireAllProjectiles() {
         canFire = false;
         primaryWeapon.CurrentMag--;
-        weaponManager.currentAnimator.Fire();
+        weaponManager.currentAnimator.Fire(primaryWeapon.FiringRate);
         ZombieHealth hitZombie;
         for (int shots = primaryWeapon.Projectiles; shots > 0; shots--) {
-            if (Physics.Raycast(playerCamera.gameObject.transform.position,
-            playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
+
+            Vector3 bulletDir = playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
             (new Vector3(UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius),
-            UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius))),
-            out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
+            UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius)));
+
+            if (Physics.Raycast(playerCamera.gameObject.transform.position, bulletDir, out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
 
                 if (hit.transform.gameObject.CompareTag("Zombie Head")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
-                    hitZombie.TakeDamage(primaryWeapon.BulletDamage, primaryWeapon.HeadshotMultiplier);
+                    hitZombie.TakeDamage(Damage(true, hit.distance));
                     points.AddPoints(primaryWeapon.PointValue, primaryWeapon.PointMultiplier);
                 }
                 else if (hit.transform.gameObject.CompareTag("Zombie")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
-                    hitZombie.TakeDamage(primaryWeapon.BulletDamage);
+                    hitZombie.TakeDamage(Damage(false, hit.distance));
                     points.AddPoints(primaryWeapon.PointValue);
                 }
                 else {
@@ -269,6 +272,7 @@ public class UseWeapon : MonoBehaviour {
         canFire = true;
         yield break;
     }
+
 
     #endregion
     #region NoAmmo
@@ -310,6 +314,11 @@ public class UseWeapon : MonoBehaviour {
         }
     }
 
+    private float Damage(bool headshot, float distance) {
+        float damage = primaryWeapon.BulletDamage * Mathf.Pow(primaryWeapon.DamageFalloff, distance / -100);
+        if (headshot) { return damage * primaryWeapon.HeadshotMultiplier; }
+        else { return damage; }
+    }
 
     #endregion
     #region Weapon Buying

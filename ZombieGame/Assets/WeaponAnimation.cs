@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponAnimation : MonoBehaviour {
+    public float snappiness = 1;
     public Animator ani;
     public Transform face;
     public Transform hand;
@@ -16,7 +17,7 @@ public class WeaponAnimation : MonoBehaviour {
     private void Start() {
         AnimationClip[] clips = ani.runtimeAnimatorController.animationClips;
         foreach (AnimationClip clip in clips) {
-            if(clip.name == gameObject.name + "Reloading") {
+            if(clip.name == gameObject.name + "Reload") {
                 reloadTime = clip.length;
             }
             else if(clip.name == gameObject.name + "Fire") {
@@ -25,7 +26,9 @@ public class WeaponAnimation : MonoBehaviour {
         }
     }
 
-    public void Fire() {
+    public void Fire(float rate) {
+        float mult = (fireTime / rate) * snappiness;
+        ani.SetFloat("fireMultiplier", mult);
         ani.SetTrigger("Fire");
         flash.Play();
     }

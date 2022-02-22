@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class M1911 : Weapon {
-    public M1911() {
-        WeaponName = "M1911";
-        Flair = "Standard Issue";
+public class Pistol : Weapon {
+    public Pistol() {
+        WeaponName = "Pistol";
+        Flair = "M1911";
         BulletHoleSize = "Small";
         ReserveAmmo = 42;
         MaxReserveAmmo = 42;
@@ -13,7 +13,7 @@ public class M1911 : Weapon {
         MaxMag = 7;
         DrawTime = 0.8f;
         BulletDamage = 20;
-        DamageFalloff = 10;
+        DamageFalloff = 2.5f;
         ReloadSpeed = 1f;
         FiringRate = 0.35f;
         PointValue = 5;
@@ -21,7 +21,7 @@ public class M1911 : Weapon {
         HeadshotMultiplier = 1.25f;
         Pierce = false;
         ClipFed = true;
-        MaxRange = 15;
+        MaxRange = 25;
         Automatic = false;
         Projectiles = 1;
         BulletSpreadRadius = 0.01f;
