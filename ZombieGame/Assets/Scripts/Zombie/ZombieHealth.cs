@@ -20,14 +20,10 @@ public class ZombieHealth : MonoBehaviour {
 
     public void TakeDamage(float dmg) {
         health -= dmg;
-        ZombieDeath();
-    }
-    public void TakeDamage(float dmg, float multiplier) {
-        health -= dmg * multiplier;
-        ZombieDeath();
+        DoesZombieDie();
     }
 
-    private void ZombieDeath() {
+    private void DoesZombieDie() {
         if (health <= 0) {
             gameObject.SetActive(false);
             roundManager.ZombieDeath();
@@ -36,8 +32,7 @@ public class ZombieHealth : MonoBehaviour {
     }
 
     private void PrepZombieNextSpawn() {
-        health = roundManager.currentHealth;
-        healthBar.maxValue = health;
+        UpdateStats();
         roundManager.QueueZombie(gameObject);
     }
 

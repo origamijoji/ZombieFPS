@@ -13,9 +13,9 @@ public class Sniper : Weapon {
         MaxMag = 5;
         DrawTime = 2f;
         BulletDamage = 50;
-        DamageFalloff = 0;
+        DamageFalloff = 1;
         ReloadSpeed = 4f;
-        FiringRate = 3f;
+        FiringRate = 2f;
         PointValue = 10;
         PointMultiplier = 1f;
         HeadshotMultiplier = 5f;

@@ -18,6 +18,8 @@ public class HUDManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI purchaseText;
     [SerializeField] private TextMeshProUGUI roundText;
 
+    [SerializeField] private GameObject crosshair;
+
     [SerializeField] private GameObject reloading;
     private Slider reloadingSlider;
 
@@ -102,6 +104,13 @@ public class HUDManager : MonoBehaviour {
         else { purchaseText.gameObject.SetActive(false); }
 
         roundText.text = "Round \n" + roundmanager.currentRound;
+
+        if(useWeapon.isZoomed) {
+            crosshair.SetActive(false);
+        }
+        else {
+            crosshair.SetActive(true);
+        }
     }
 
 }

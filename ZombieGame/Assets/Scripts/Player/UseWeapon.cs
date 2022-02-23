@@ -28,7 +28,8 @@ public class UseWeapon : MonoBehaviour {
     private PoolManager poolManager;
     private Points points;
     private MovePlayer movePlayer;
-    private WeaponAnimation weaponAnimator;
+    private WeaponManager weaponManager;
+    private TrailRenderer trailRenderer;
 
     public float firingTime;
     public bool canFire;
@@ -49,6 +50,8 @@ public class UseWeapon : MonoBehaviour {
     private GiveGun buyZone;
     public LayerMask whatIsBuyZone;
 
+    public bool isZoomed;
+
     Coroutine PurchaseWeapon;
     Coroutine FireWeapon;
 
@@ -63,7 +66,8 @@ public class UseWeapon : MonoBehaviour {
         mouseLook = gameObject.GetComponent<MouseLook>();
         playerCamera = mouseLook.playerCamera;
         points = gameObject.GetComponent<Points>();
-        weaponAnimator = playerCamera.GetComponentInChildren<WeaponAnimation>();
+        weaponManager = playerCamera.GetComponentInParent<WeaponManager>();
+        trailRenderer = gameObject.GetComponent<TrailRenderer>();
         //global components
         poolManager = PoolManager.instance;
     }
@@ -72,6 +76,7 @@ public class UseWeapon : MonoBehaviour {
         playerMask = ~playerMask;
         primaryWeapon = new Pistol();
         secondaryWeapon = new None();
+        weaponManager.SetActiveWeapon(primaryWeapon.WeaponName);
         canFire = true;
     }
     #endregion
@@ -94,14 +99,16 @@ public class UseWeapon : MonoBehaviour {
         }
 
         if (Input.GetMouseButton(1)) {
+            isZoomed = true;
             mouseLook.ZoomWeapon(primaryWeapon.ZoomValue);
             movePlayer.ZoomedIn(primaryWeapon.ZoomMoveSpeed);
-            weaponAnimator.MoveToFace();
+            weaponManager.currentAnimator.MoveToFace();
         }
         else {
+            isZoomed = false;
             mouseLook.UnZoom();
             movePlayer.UnZoom();
-            weaponAnimator.MoveToHand();
+            weaponManager.currentAnimator.MoveToHand();
         }
     }
     #endregion
@@ -150,7 +157,7 @@ public class UseWeapon : MonoBehaviour {
         isReloading = true;
         if (primaryWeapon.ClipFed) {
             while (isReloading) {
-                weaponAnimator.Reload(primaryWeapon.ReloadSpeed);
+                weaponManager.currentAnimator.Reload(primaryWeapon.ReloadSpeed);
                 reloadTimer = primaryWeapon.ReloadSpeed;
                 yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
                 int ammoRequired = primaryWeapon.MaxMag - primaryWeapon.CurrentMag;
@@ -170,6 +177,7 @@ public class UseWeapon : MonoBehaviour {
             chamberTimer = primaryWeapon.ChamberTime;
             yield return new WaitForSeconds(primaryWeapon.ChamberTime);
             while (isReloading && primaryWeapon.CurrentMag < primaryWeapon.MaxMag && primaryWeapon.ReserveAmmo > 0) {
+                weaponManager.currentAnimator.Reload(primaryWeapon.ReloadSpeed);
                 reloadTimer = primaryWeapon.ReloadSpeed;
                 yield return new WaitForSeconds(primaryWeapon.ReloadSpeed);
                 primaryWeapon.CurrentMag++;
@@ -198,6 +206,7 @@ public class UseWeapon : MonoBehaviour {
     public IEnumerator Switch() {
         isSwitching = true;
         switchTimer = secondaryWeapon.DrawTime;
+        StartCoroutine(weaponManager.SwitchWeapons(secondaryWeapon.WeaponName, secondaryWeapon.DrawTime));
         yield return new WaitForSeconds(secondaryWeapon.DrawTime);
         Weapon temp = secondaryWeapon;
         secondaryWeapon = primaryWeapon;
@@ -222,23 +231,24 @@ public class UseWeapon : MonoBehaviour {
     IEnumerator FireAllProjectiles() {
         canFire = false;
         primaryWeapon.CurrentMag--;
-        weaponAnimator.Fire();
+        weaponManager.currentAnimator.Fire(primaryWeapon.FiringRate);
         ZombieHealth hitZombie;
         for (int shots = primaryWeapon.Projectiles; shots > 0; shots--) {
-            if (Physics.Raycast(playerCamera.gameObject.transform.position,
-            playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
+
+            Vector3 bulletDir = playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
             (new Vector3(UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius),
-            UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius))),
-            out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
+            UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius)));
+
+            if (Physics.Raycast(playerCamera.gameObject.transform.position, bulletDir, out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
 
                 if (hit.transform.gameObject.CompareTag("Zombie Head")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
-                    hitZombie.TakeDamage(primaryWeapon.BulletDamage, primaryWeapon.HeadshotMultiplier);
+                    hitZombie.TakeDamage(Damage(true, hit.distance));
                     points.AddPoints(primaryWeapon.PointValue, primaryWeapon.PointMultiplier);
                 }
                 else if (hit.transform.gameObject.CompareTag("Zombie")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
-                    hitZombie.TakeDamage(primaryWeapon.BulletDamage);
+                    hitZombie.TakeDamage(Damage(false, hit.distance));
                     points.AddPoints(primaryWeapon.PointValue);
                 }
                 else {
@@ -264,6 +274,7 @@ public class UseWeapon : MonoBehaviour {
         yield break;
     }
 
+
     #endregion
     #region NoAmmo
     /*
@@ -274,7 +285,7 @@ public class UseWeapon : MonoBehaviour {
             noAmmoText.SetActive(true);
         }
         else {
-            noAmmoText.SetActive(false); 
+            noAmmoText.SetActive(false);
         }
     }
     #endregion
@@ -304,6 +315,11 @@ public class UseWeapon : MonoBehaviour {
         }
     }
 
+    private float Damage(bool headshot, float distance) {
+        float damage = primaryWeapon.BulletDamage * Mathf.Pow(primaryWeapon.DamageFalloff, distance / -100);
+        if (headshot) { return damage * primaryWeapon.HeadshotMultiplier; }
+        else { return damage; }
+    }
 
     #endregion
     #region Weapon Buying
@@ -355,21 +371,18 @@ public class UseWeapon : MonoBehaviour {
                 Weapon temp = secondaryWeapon;
                 secondaryWeapon = primaryWeapon;
                 primaryWeapon = temp;
+                weaponManager.SetActiveWeapon(buyZone.weapon);
             }
             else { //if player has two weapons, make their current weapon the purchassed weapon
                 Debug.Log("Primary Purchased");
                 primaryWeapon = (Weapon)Activator.CreateInstance(buyZone.weaponType);
+                weaponManager.SetActiveWeapon(buyZone.weapon);
             }
         }
         else { //if weapon is obtained, purchase ammo instead
             points.RemovePoints(buyZone.ammoCost);
             Debug.Log("Ammo Purchased");
-            if (primaryWeapon.WeaponName == buyZone.weapon) {
-                primaryWeapon.ReserveAmmo = primaryWeapon.MaxReserveAmmo;
-            }
-            else { //if weapon is not in main hand, do nothing
-                secondaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
-            }
+            primaryWeapon.ReserveAmmo = primaryWeapon.MaxReserveAmmo;
         }
     }
 
