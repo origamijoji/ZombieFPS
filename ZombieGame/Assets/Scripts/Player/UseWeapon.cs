@@ -387,6 +387,9 @@ public class UseWeapon : MonoBehaviour {
     }
 
     #endregion
+    #region Melee
+
+    #endregion
     #region Debug
     public void SpawnWeapon(string weaponType) {
         Type weapon = Type.GetType(weaponType);

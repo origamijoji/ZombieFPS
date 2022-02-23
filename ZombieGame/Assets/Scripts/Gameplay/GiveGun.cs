@@ -7,7 +7,7 @@ public class GiveGun : MonoBehaviour {
 
     /// <summary>
     /// This script lets you edit its values in the inspector, and the player will call them when they purchase a weapon
-    /// The UI of the script will activate only when the player is within range of it.
+    /// The UI of the script will activate only when the player is within 3 units of it.
     /// </summary>
 
     [Tooltip("Name of weapon being sold")]
@@ -22,7 +22,7 @@ public class GiveGun : MonoBehaviour {
     [HideInInspector]
     public Type weaponType;
     private GameObject player;
-    private PhysicalUI physUI;
+    private GameObject UI;
 
     [Header("~ Stats ~")]
     public float RPM;
@@ -30,7 +30,7 @@ public class GiveGun : MonoBehaviour {
     public int reserveAmmo;
     public float damage;
     public float critValue;
-    public string Weight;
+    public string weight;
 
     public Weapon thisWeapon;
 
@@ -39,7 +39,7 @@ public class GiveGun : MonoBehaviour {
             weaponType = Type.GetType(weapon);
         }
         thisWeapon = (Weapon)Activator.CreateInstance(weaponType);
-        RPM = (1 / thisWeapon.FiringRate) * 60;
+        RPM = Mathf.Round(1 / thisWeapon.FiringRate * 60);
         magSize = thisWeapon.MaxMag;
         reserveAmmo = thisWeapon.ReserveAmmo;
         damage = thisWeapon.BulletDamage;
@@ -50,7 +50,7 @@ public class GiveGun : MonoBehaviour {
         //player components
         player = GameObject.FindGameObjectWithTag("Player");
         //local components
-        physUI = gameObject.GetComponentInChildren<PhysicalUI>();
+        UI = gameObject.GetComponentInChildren<Canvas>().gameObject;
     }
 
     void Start() {
@@ -60,9 +60,9 @@ public class GiveGun : MonoBehaviour {
     private void Update() {
 
         if (Vector3.Distance(gameObject.transform.position, player.gameObject.transform.position) < 3) {
-            physUI.gameObject.SetActive(true);
+            UI.SetActive(true);
         }
-        else { physUI.gameObject.SetActive(false); }
+        else { UI.SetActive(false); }
     }
 }
 

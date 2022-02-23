@@ -14,7 +14,7 @@ public class RoundManager : MonoBehaviour {
             return _instance;
         }
     }
-
+    public bool disableSpawn;
     public int currentRound;
     public int zombiesThisRound;
     public int zombiesSpawned;
@@ -64,7 +64,8 @@ public class RoundManager : MonoBehaviour {
                 obj.transform.parent = parent;
             }
         }
-        StartCoroutine(StartNextRound());
+        if(!disableSpawn) { StartCoroutine(StartNextRound()); }
+
     }
 
     private void Update() {
@@ -119,10 +120,6 @@ public class RoundManager : MonoBehaviour {
         zombiesRemaining = zombiesThisRound;
         SpawnZombies = StartCoroutine(SpawnHorde());
     }
-
-    private void EndRound() {
-    }
-
 
     public GameObject SpawnZombie() {
 
