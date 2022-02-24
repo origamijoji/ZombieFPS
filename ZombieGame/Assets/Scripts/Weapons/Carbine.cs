@@ -28,5 +28,6 @@ public class Carbine : Weapon {
         ExplosionRadius = 0;
         ZoomValue = 40;
         ZoomMoveSpeed = 0.7f;
+        Recoil = 1.5f;
     }
 }

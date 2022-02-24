@@ -98,7 +98,7 @@ public class UseWeapon : MonoBehaviour {
             movePlayer.LockMovement(false);
         }
 
-        if (Input.GetMouseButton(1)) {
+        if (Input.GetMouseButton(1) && !isReloading) {
             isZoomed = true;
             mouseLook.ZoomWeapon(primaryWeapon.ZoomValue);
             movePlayer.ZoomedIn(primaryWeapon.ZoomMoveSpeed);
@@ -232,12 +232,24 @@ public class UseWeapon : MonoBehaviour {
         canFire = false;
         primaryWeapon.CurrentMag--;
         weaponManager.currentAnimator.Fire(primaryWeapon.FiringRate);
+        mouseLook.Recoil(primaryWeapon.Recoil);
         ZombieHealth hitZombie;
+        if(primaryWeapon.Pierce) {
+            for(int shots = primaryWeapon.Projectiles; shots > 0; shots --) {
+              //  if(Physics.RaycastAll
+
+            }
+        }
         for (int shots = primaryWeapon.Projectiles; shots > 0; shots--) {
 
             Vector3 bulletDir = playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
             (new Vector3(UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius),
             UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius)));
+            if(primaryWeapon.Pierce) {
+                //if(Physics.RaycastAll(playerCamera.gameObject.transform.position, bulletDir, out RaycastHit[] hits, primaryWeapon.MaxRange, playerMask)) {
+
+                //}
+            }
 
             if (Physics.Raycast(playerCamera.gameObject.transform.position, bulletDir, out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
 
@@ -317,8 +329,10 @@ public class UseWeapon : MonoBehaviour {
 
     private float Damage(bool headshot, float distance) {
         float damage = primaryWeapon.BulletDamage * Mathf.Pow(primaryWeapon.DamageFalloff, distance / -100);
+        Debug.Log(damage);
         if (headshot) { return damage * primaryWeapon.HeadshotMultiplier; }
         else { return damage; }
+
     }
 
     #endregion
@@ -351,7 +365,6 @@ public class UseWeapon : MonoBehaviour {
 
     IEnumerator Purchasing() {
         while (CanPurchase() && isInteracting) {
-            Debug.Log("purchasing");
             interactTimer = interactTime;
             yield return new WaitForSeconds(interactTime);
             DecidePurchase();

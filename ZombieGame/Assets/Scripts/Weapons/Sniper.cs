@@ -28,5 +28,6 @@ public class Sniper : Weapon {
         ExplosionRadius = 0;
         ZoomValue = 20;
         ZoomMoveSpeed = 0.3f;
+        Recoil = 4;
     }
 }

@@ -205,13 +205,14 @@ GameObject:
   - component: {fileID: 3482923679347958703}
   - component: {fileID: 7193587}
   - component: {fileID: 5289697332349299163}
+  - component: {fileID: 1245953606}
   m_Layer: 7
   m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3482923679347958700
 Transform:
   m_ObjectHideFlags: 0
@@ -257,6 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  agent: {fileID: 0}
   speed: 0.02
 --- !u!195 &5289697332349299163
 NavMeshAgent:
@@ -277,9 +279,27 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: 1.01
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!143 &1245953606
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3482923679347958706}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3482923679473710488
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +333,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 4.91, y: 0}
   m_SizeDelta: {x: 19.83, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

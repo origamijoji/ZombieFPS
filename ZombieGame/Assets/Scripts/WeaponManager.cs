@@ -37,7 +37,6 @@ public class WeaponManager : MonoBehaviour {
 
     private void DisableAllWeapons() {
         foreach(WeaponModel weapon in weapons) {
-            Debug.Log(weapon.name + " disabled");
             weapon.model.SetActive(false);
         }
     }

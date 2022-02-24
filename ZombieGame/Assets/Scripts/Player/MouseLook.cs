@@ -12,6 +12,9 @@ public class MouseLook : MonoBehaviour {
     public float sensY;
     public float defaultFOV = 60f;
 
+    public float currentRecoil;
+    public float resetRate;
+
     private float mouseX;
     private float mouseY;
 
@@ -42,7 +45,9 @@ public class MouseLook : MonoBehaviour {
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        playerCamera.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        currentRecoil = Mathf.Lerp(currentRecoil, 0, Time.deltaTime * 2);
+
+        playerCamera.transform.rotation = Quaternion.Euler(xRotation - currentRecoil, yRotation, 0);
         orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
@@ -63,6 +68,10 @@ public class MouseLook : MonoBehaviour {
     public void UnZoom() {
         playerCamera.fieldOfView = defaultFOV;
         zoomValue = 1;
+    }
+
+    public void Recoil(float amount) {
+        currentRecoil += amount;
     }
 }
 
