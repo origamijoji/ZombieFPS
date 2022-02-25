@@ -27,7 +27,9 @@ public class ZombieHealth : MonoBehaviour {
         if (health <= 0) {
             gameObject.SetActive(false);
             roundManager.ZombieDeath();
+            roundManager.SpawnPowerup(gameObject.transform.position, gameObject.transform.rotation);
             PrepZombieNextSpawn();
+
         }
     }
 

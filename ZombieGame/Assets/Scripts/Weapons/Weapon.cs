@@ -28,6 +28,7 @@ public abstract class Weapon {
     public float ExplosionRadius { get; set; } // Explosion radius of hit.point
     public float ZoomValue { get; set; } // FOV while zoomed in (60 is default)
     public float ZoomMoveSpeed { get; set; } // Fraction of moving speed while zoomed in
+    public float Recoil { get; set; }
 
 }
 

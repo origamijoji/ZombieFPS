@@ -28,5 +28,6 @@ public class Pistol : Weapon {
         ExplosionRadius = 0;
         ZoomValue = 49;
         ZoomMoveSpeed = 0.8f;
+        Recoil = 1;
     }
 }

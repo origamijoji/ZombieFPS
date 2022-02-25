@@ -24,6 +24,7 @@ public class WeaponAnimation : MonoBehaviour {
                 fireTime = clip.length;
             }
         }
+        MoveToHand();
     }
 
     private void OnDisable() {
