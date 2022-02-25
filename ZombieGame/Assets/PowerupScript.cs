@@ -7,6 +7,7 @@ public class PowerupScript : MonoBehaviour
     public string powerupType;
     public double duration;
     public double timeLeft;
+    public float spinSpeed;
 
     private RoundManager roundManager;
 
@@ -21,6 +22,7 @@ public class PowerupScript : MonoBehaviour
         timeLeft = duration;
     }
     private void Update() {
+        PowerupVisual();
         if(timeLeft > 0) {
             timeLeft -= Time.deltaTime;
         }
@@ -32,8 +34,10 @@ public class PowerupScript : MonoBehaviour
         if(other.gameObject.CompareTag("Player")) {
             switch(powerupType) {
                 case "MaxAmmo":
+                    MaxAmmo?.Invoke();
                     break;
                 case "InstaKill":
+                    InstaKill?.Invoke();
                     break;
             }
             DisablePowerup();
@@ -46,5 +50,9 @@ public class PowerupScript : MonoBehaviour
     private void DisablePowerup() {
         gameObject.SetActive(false);
         roundManager.DisablePowerup(powerupType);
+    }
+
+    private void PowerupVisual() {
+        gameObject.transform.Rotate(0f, spinSpeed * Time.deltaTime, 0f);
     }
 }
