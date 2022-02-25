@@ -20,7 +20,6 @@ public class RoundManager : MonoBehaviour {
     public int zombiesSpawned;
     public int zombiesRemaining;
     public bool roundActive;
-
     public float inbetweenRoundTime;
     public float spawnTime;
     public float currentHealth;
@@ -37,17 +36,29 @@ public class RoundManager : MonoBehaviour {
         public GameObject prefab;
         public int size;
     }
-
     public List<Zombies> zombies;
     public Queue<GameObject> zombieQueue = new Queue<GameObject>();
+
+    [System.Serializable]
+    public class Powerups {
+        public string type;
+        public int position;
+        public bool active;
+        public GameObject obj;
+    }
+    public List<Powerups> powerups;
 
     public float timeToNextSpawn;
     public GameObject[] spawnLocations;
     public GameObject previousSpawnLocation;
-    private Coroutine SpawnZombies;
 
     public delegate void UpdateZombies();
     public static event UpdateZombies NewRound;
+
+    [Tooltip("Fraction of 100")]
+    public int powerupChance;
+    public int powerupsLeft;
+    public int powerupsMax = 4;
 
     private void Awake() {
         spawnLocations = GameObject.FindGameObjectsWithTag("Window");
@@ -64,12 +75,20 @@ public class RoundManager : MonoBehaviour {
                 obj.transform.parent = parent;
             }
         }
-        if(!disableSpawn) { StartCoroutine(StartNextRound()); }
+
+        int powerupPosition = 1;
+        foreach (Powerups powerup in powerups) {
+            powerup.position = powerupPosition;
+            powerupPosition++;
+        }
+
+        currentSpeed = 1;
+        if (!disableSpawn) { StartCoroutine(StartNextRound()); }
 
     }
 
     private void Update() {
-        if(timeToNextSpawn > 0) {
+        if (timeToNextSpawn > 0) {
             timeToNextSpawn -= Time.deltaTime;
         }
     }
@@ -118,7 +137,11 @@ public class RoundManager : MonoBehaviour {
         spawnTime = spawnRate * spawnTime;
         zombiesThisRound = (int)(currentRound * zombieRate * 24);
         zombiesRemaining = zombiesThisRound;
-        SpawnZombies = StartCoroutine(SpawnHorde());
+        powerupsLeft = powerupsMax;
+        foreach (Powerups powerup in powerups) {
+            powerup.active = false;
+        }
+        StartCoroutine(SpawnHorde());
     }
 
     public GameObject SpawnZombie() {
@@ -127,14 +150,40 @@ public class RoundManager : MonoBehaviour {
         previousSpawnLocation = spawnLocations[Random.Range(0, spawnLocations.Length)];
 
         objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = previousSpawnLocation.transform.position;
-        objectToSpawn.transform.rotation = previousSpawnLocation.transform.rotation;
+        objectToSpawn.transform.SetPositionAndRotation(previousSpawnLocation.transform.position, previousSpawnLocation.transform.rotation);
 
         return objectToSpawn;
     }
 
     public void QueueZombie(GameObject thisObject) {
         zombieQueue.Enqueue(thisObject);
+    }
+
+    public GameObject SpawnPowerup(Vector3 position, Quaternion rotation) {
+        int chance = Random.Range(1, 101);
+        if (chance < powerupChance) {
+            int powerupType = Random.Range(1, powerups.Count + 1);
+            Powerups powerup = powerups.Find(e => e.position.Equals(powerupType));
+
+            if (powerupsLeft > 0 && powerup.active == false) {
+
+                powerup.active = true;
+                GameObject objectToSpawn = powerup.obj;
+
+                powerupsLeft--;
+
+                objectToSpawn.SetActive(true);
+                objectToSpawn.transform.SetPositionAndRotation(position, rotation);
+
+                return objectToSpawn;
+            }
+        }
+        return null;
+    }
+
+    public void DisablePowerup(string powerupName) {
+        Powerups powerup = powerups.Find(p => p.type.Equals(powerupName));
+        powerup.active = false;
     }
 
 }

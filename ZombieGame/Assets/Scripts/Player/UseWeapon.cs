@@ -70,6 +70,8 @@ public class UseWeapon : MonoBehaviour {
         trailRenderer = gameObject.GetComponent<TrailRenderer>();
         //global components
         poolManager = PoolManager.instance;
+        //events
+        PowerupScript.MaxAmmo += MaxAmmo;
     }
 
     private void Start() {
@@ -393,9 +395,16 @@ public class UseWeapon : MonoBehaviour {
             }
         }
         else { //if weapon is obtained, purchase ammo instead
-            points.RemovePoints(buyZone.ammoCost);
-            Debug.Log("Ammo Purchased");
-            primaryWeapon.ReserveAmmo = primaryWeapon.MaxReserveAmmo;
+            if (primaryWeapon.WeaponName.Equals(buyZone.weapon)) {
+                points.RemovePoints(buyZone.ammoCost);
+                Debug.Log("Ammo Purchased");
+                primaryWeapon.ReserveAmmo = primaryWeapon.MaxReserveAmmo;
+            }
+            else if (secondaryWeapon.WeaponName.Equals(buyZone.weapon)) {
+                points.RemovePoints(buyZone.ammoCost);
+                Debug.Log("Ammo Purchased");
+                primaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
+            }
         }
     }
 
@@ -407,6 +416,14 @@ public class UseWeapon : MonoBehaviour {
     public void SpawnWeapon(string weaponType) {
         Type weapon = Type.GetType(weaponType);
         primaryWeapon = (Weapon)Activator.CreateInstance(weapon);
+        weaponManager.SetActiveWeapon(weaponType);
     }
+    #endregion
+    #region Powerups
+    private void MaxAmmo() {
+        primaryWeapon.ReserveAmmo = primaryWeapon.MaxReserveAmmo;
+        secondaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
+    }
+
     #endregion
 }
