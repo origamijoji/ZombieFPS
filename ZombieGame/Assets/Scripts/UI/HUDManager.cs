@@ -17,6 +17,8 @@ public class HUDManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI transactionText;
     [SerializeField] private TextMeshProUGUI purchaseText;
     [SerializeField] private TextMeshProUGUI roundText;
+    [SerializeField] private TextMeshProUGUI instaKillText;
+    [SerializeField] private TextMeshProUGUI noAmmoText;
 
     [SerializeField] private GameObject crosshair;
 
@@ -110,6 +112,20 @@ public class HUDManager : MonoBehaviour {
         }
         else {
             crosshair.SetActive(true);
+        }
+
+        if(useWeapon.instaKillTimer > 0) {
+            instaKillText.gameObject.SetActive(true);
+        }
+        else {
+            instaKillText.gameObject.SetActive(false);
+        }
+
+        if(useWeapon.primaryWeapon.CurrentMag.Equals(0) && useWeapon.primaryWeapon.ReserveAmmo.Equals(0)) {
+            noAmmoText.gameObject.SetActive(true);
+        }
+        else {
+            noAmmoText.gameObject.SetActive(false);
         }
     }
 

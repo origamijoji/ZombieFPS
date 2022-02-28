@@ -22,42 +22,49 @@ public class UseWeapon : MonoBehaviour {
     [HideInInspector]
     public Weapon secondaryWeapon;
 
-    public LayerMask playerMask;
+
     private MouseLook mouseLook;
     private Camera playerCamera;
     private PoolManager poolManager;
     private Points points;
     private MovePlayer movePlayer;
     private WeaponManager weaponManager;
-    private TrailRenderer trailRenderer;
+    private BoxCollider meleeRange;
 
-    public float firingTime;
-    public bool canFire;
 
-    public bool isReloading;
-    public float reloadTimer;
-    public float chamberTimer;
+    [HideInInspector] public float firingTime;
+    [HideInInspector] public bool canFire;
 
-    public bool isSwitching;
-    public float switchTimer;
+    [HideInInspector] public bool isReloading;
+    [HideInInspector] public float reloadTimer;
+    [HideInInspector] public float chamberTimer;
 
-    public bool isInteracting;
-    public float interactTimer;
+    [HideInInspector] public bool isSwitching;
+    [HideInInspector] public float switchTimer;
+
+    [HideInInspector] public bool isInteracting;
+    [HideInInspector] public float interactTimer;
     public float interactTime;
 
-    public float buyRange;
-    public bool isLookingAtBuyZone;
-    private GiveGun buyZone;
-    public LayerMask whatIsBuyZone;
+    [HideInInspector] public float instaKillTimer;
+    public float instaKillTime;
 
-    public bool isZoomed;
+    [Header("~~")]
+    public bool zombieInRange;
+    public float meleeDamage;
+    public float buyRange;
+    private GiveGun buyZone;
+    public LayerMask playerMask;
+    public LayerMask whatIsBuyZone;
+    public LayerMask zombieLayer;
+
+    [HideInInspector] public bool isZoomed;
 
     Coroutine PurchaseWeapon;
     Coroutine FireWeapon;
 
     //pierce
     //range
-    public GameObject noAmmoText;
     #region MonoBehaviour Awake(), Start()
 
     private void Awake() {
@@ -67,11 +74,12 @@ public class UseWeapon : MonoBehaviour {
         playerCamera = mouseLook.playerCamera;
         points = gameObject.GetComponent<Points>();
         weaponManager = playerCamera.GetComponentInParent<WeaponManager>();
-        trailRenderer = gameObject.GetComponent<TrailRenderer>();
+        meleeRange = mouseLook.orientation.GetComponentInChildren<BoxCollider>();
         //global components
         poolManager = PoolManager.instance;
         //events
         PowerupScript.MaxAmmo += MaxAmmo;
+        PowerupScript.InstaKill += InstaKill;
     }
 
     private void Start() {
@@ -88,8 +96,8 @@ public class UseWeapon : MonoBehaviour {
         Fire();
         SwitchWeapon();
         ShowInspector();
-        NoAmmo();
         DoPurchase();
+        DoMelee();
 
         if (isInteracting) {
             mouseLook.LockMouseInput(true);
@@ -111,6 +119,10 @@ public class UseWeapon : MonoBehaviour {
             mouseLook.UnZoom();
             movePlayer.UnZoom();
             weaponManager.currentAnimator.MoveToHand();
+        }
+
+        if(instaKillTimer > 0) {
+            instaKillTimer -= Time.deltaTime;
         }
     }
     #endregion
@@ -257,12 +269,12 @@ public class UseWeapon : MonoBehaviour {
 
                 if (hit.transform.gameObject.CompareTag("Zombie Head")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
-                    hitZombie.TakeDamage(Damage(true, hit.distance));
+                    hitZombie.TakeDamage(Damage(true, hit.distance), CanInstaKill());
                     points.AddPoints(primaryWeapon.PointValue, primaryWeapon.PointMultiplier);
                 }
                 else if (hit.transform.gameObject.CompareTag("Zombie")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
-                    hitZombie.TakeDamage(Damage(false, hit.distance));
+                    hitZombie.TakeDamage(Damage(false, hit.distance), CanInstaKill());
                     points.AddPoints(primaryWeapon.PointValue);
                 }
                 else {
@@ -289,19 +301,6 @@ public class UseWeapon : MonoBehaviour {
     }
 
 
-    #endregion
-    #region NoAmmo
-    /*
-     * If player has no ammo in their current weapon, display UI text.
-     */
-    private void NoAmmo() {
-        if (primaryWeapon.ReserveAmmo == 0 && primaryWeapon.CurrentMag == 0) {
-            noAmmoText.SetActive(true);
-        }
-        else {
-            noAmmoText.SetActive(false);
-        }
-    }
     #endregion
     #region Return Methods
     public bool CanPurchase() { //if player is looking at a buy zone, return true
@@ -335,6 +334,13 @@ public class UseWeapon : MonoBehaviour {
         if (headshot) { return damage * primaryWeapon.HeadshotMultiplier; }
         else { return damage; }
 
+    }
+
+    private bool CanInstaKill() {
+        if(instaKillTimer > 0) {
+            return true;
+        }
+        return false;
     }
 
     #endregion
@@ -410,6 +416,27 @@ public class UseWeapon : MonoBehaviour {
 
     #endregion
     #region Melee
+    GameObject meleeTarget;
+    private void OnTriggerEnter(Collider other) {
+        if(other.gameObject.CompareTag("Zombie")) {
+            zombieInRange = true;
+            meleeTarget = other.gameObject;
+        }
+        else {
+            zombieInRange = false;
+        }
+    }
+    private void DoMelee() {
+        if(Input.GetKeyDown(KeyCode.V)) {
+            
+
+        }
+
+    }
+    
+    private void MeleeTarget(GameObject target) {
+
+    }
 
     #endregion
     #region Debug
@@ -425,5 +452,8 @@ public class UseWeapon : MonoBehaviour {
         secondaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
     }
 
+    private void InstaKill() {
+        instaKillTimer = instaKillTime;
+    }
     #endregion
 }

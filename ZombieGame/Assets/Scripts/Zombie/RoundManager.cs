@@ -19,16 +19,18 @@ public class RoundManager : MonoBehaviour {
     public int zombiesThisRound;
     public int zombiesSpawned;
     public int zombiesRemaining;
-    public bool roundActive;
-    public float inbetweenRoundTime;
-    public float spawnTime;
+    private bool roundActive;
+    [SerializeField] private float inbetweenRoundTime;
+    [SerializeField] private float spawnTime;
     public float currentHealth;
     public float currentSpeed;
+    public int pity;
+    public int currentPity;
 
-    public float zombieRate = 0.15f;
-    public float healthRate = 100;
-    public float speedRate = 0.2f;
-    public float spawnRate = 0.8f;
+    [SerializeField] private float zombieRate = 0.15f;
+    [SerializeField] private float healthRate = 100;
+    [SerializeField] private float speedRate = 0.2f;
+    [SerializeField] private float spawnRate = 0.8f;
 
     [System.Serializable]
     public class Zombies {
@@ -138,6 +140,7 @@ public class RoundManager : MonoBehaviour {
         zombiesThisRound = (int)(currentRound * zombieRate * 24);
         zombiesRemaining = zombiesThisRound;
         powerupsLeft = powerupsMax;
+        pity = (int) Mathf.Pow(currentRound, 2)/2 + 5;
         foreach (Powerups powerup in powerups) {
             powerup.active = false;
         }
@@ -161,7 +164,9 @@ public class RoundManager : MonoBehaviour {
 
     public GameObject SpawnPowerup(Vector3 position, Quaternion rotation) {
         int chance = Random.Range(1, 101);
-        if (chance < powerupChance) {
+        Debug.Log("Roll: " + chance);
+        if (chance < powerupChance || pity <= currentPity) {
+            currentPity = 0;
             int powerupType = Random.Range(1, powerups.Count + 1);
             Powerups powerup = powerups.Find(e => e.position.Equals(powerupType));
 
@@ -178,6 +183,8 @@ public class RoundManager : MonoBehaviour {
                 return objectToSpawn;
             }
         }
+        else { currentPity++; }
+
         return null;
     }
 

@@ -11,15 +11,18 @@ public class ZombieHealth : MonoBehaviour {
     private void Awake() {
         healthBar = gameObject.GetComponentInChildren<Slider>();
         roundManager = RoundManager.instance;
-        RoundManager.NewRound += UpdateStats;
     }
 
     void Update() {
         healthBar.value = health;
     }
 
-    public void TakeDamage(float dmg) {
+    public void TakeDamage(float dmg, bool instaKilled) {
         health -= dmg;
+        if(instaKilled) {
+            health = 0;
+        }
+
         DoesZombieDie();
     }
 
@@ -28,14 +31,12 @@ public class ZombieHealth : MonoBehaviour {
             gameObject.SetActive(false);
             roundManager.ZombieDeath();
             roundManager.SpawnPowerup(gameObject.transform.position, gameObject.transform.rotation);
-            PrepZombieNextSpawn();
+            roundManager.QueueZombie(gameObject); ;
 
         }
     }
-
-    private void PrepZombieNextSpawn() {
+    private void OnEnable() {
         UpdateStats();
-        roundManager.QueueZombie(gameObject);
     }
 
     private void UpdateStats() {
