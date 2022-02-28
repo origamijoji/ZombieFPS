@@ -5,7 +5,7 @@ using UnityEngine;
 public class Sniper : Weapon {
     public Sniper() {
         WeaponName = "Sniper";
-        Flair = "Bolt-Action";
+        Flair = "M107";
         BulletHoleSize = "Big";
         ReserveAmmo = 20;
         MaxReserveAmmo = 20;

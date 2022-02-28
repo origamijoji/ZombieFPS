@@ -29,7 +29,7 @@ public class UseWeapon : MonoBehaviour {
     private Points points;
     private MovePlayer movePlayer;
     private WeaponManager weaponManager;
-    private BoxCollider meleeRange;
+    [SerializeField] private Transform melee;
 
 
     [HideInInspector] public float firingTime;
@@ -74,7 +74,6 @@ public class UseWeapon : MonoBehaviour {
         playerCamera = mouseLook.playerCamera;
         points = gameObject.GetComponent<Points>();
         weaponManager = playerCamera.GetComponentInParent<WeaponManager>();
-        meleeRange = mouseLook.orientation.GetComponentInChildren<BoxCollider>();
         //global components
         poolManager = PoolManager.instance;
         //events
@@ -121,7 +120,7 @@ public class UseWeapon : MonoBehaviour {
             weaponManager.currentAnimator.MoveToHand();
         }
 
-        if(instaKillTimer > 0) {
+        if (instaKillTimer > 0) {
             instaKillTimer -= Time.deltaTime;
         }
     }
@@ -248,9 +247,9 @@ public class UseWeapon : MonoBehaviour {
         weaponManager.currentAnimator.Fire(primaryWeapon.FiringRate);
         mouseLook.Recoil(primaryWeapon.Recoil);
         ZombieHealth hitZombie;
-        if(primaryWeapon.Pierce) {
-            for(int shots = primaryWeapon.Projectiles; shots > 0; shots --) {
-              //  if(Physics.RaycastAll
+        if (primaryWeapon.Pierce) {
+            for (int shots = primaryWeapon.Projectiles; shots > 0; shots--) {
+                //  if(Physics.RaycastAll
 
             }
         }
@@ -259,7 +258,7 @@ public class UseWeapon : MonoBehaviour {
             Vector3 bulletDir = playerCamera.gameObject.transform.forward + playerCamera.transform.TransformDirection
             (new Vector3(UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius),
             UnityEngine.Random.Range(-primaryWeapon.BulletSpreadRadius, primaryWeapon.BulletSpreadRadius)));
-            if(primaryWeapon.Pierce) {
+            if (primaryWeapon.Pierce) {
                 //if(Physics.RaycastAll(playerCamera.gameObject.transform.position, bulletDir, out RaycastHit[] hits, primaryWeapon.MaxRange, playerMask)) {
 
                 //}
@@ -272,7 +271,7 @@ public class UseWeapon : MonoBehaviour {
                     hitZombie.TakeDamage(Damage(true, hit.distance), CanInstaKill());
                     points.AddPoints(primaryWeapon.PointValue, primaryWeapon.PointMultiplier);
                 }
-                else if (hit.transform.gameObject.CompareTag("Zombie")) {
+                else if (hit.transform.gameObject.CompareTag("Zombie Body")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
                     hitZombie.TakeDamage(Damage(false, hit.distance), CanInstaKill());
                     points.AddPoints(primaryWeapon.PointValue);
@@ -337,7 +336,7 @@ public class UseWeapon : MonoBehaviour {
     }
 
     private bool CanInstaKill() {
-        if(instaKillTimer > 0) {
+        if (instaKillTimer > 0) {
             return true;
         }
         return false;
@@ -409,33 +408,29 @@ public class UseWeapon : MonoBehaviour {
             else if (secondaryWeapon.WeaponName.Equals(buyZone.weapon)) {
                 points.RemovePoints(buyZone.ammoCost);
                 Debug.Log("Ammo Purchased");
-                primaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
+                secondaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
             }
         }
     }
 
     #endregion
     #region Melee
-    GameObject meleeTarget;
-    private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.CompareTag("Zombie")) {
-            zombieInRange = true;
-            meleeTarget = other.gameObject;
-        }
-        else {
-            zombieInRange = false;
-        }
-    }
+
     private void DoMelee() {
-        if(Input.GetKeyDown(KeyCode.V)) {
-            
-
+        if (Physics.SphereCast(melee.position, 0.5f, melee.forward, out RaycastHit hit, 0.5f, zombieLayer)) {
+            Debug.Log("zombie in range");
+            if (Input.GetKeyDown(KeyCode.V)) {
+                Debug.Log("melee hit");
+                ZombieHealth zombie = hit.transform.gameObject.GetComponent<ZombieHealth>();
+                zombie.TakeDamage(meleeDamage, CanInstaKill());
+            }
         }
-
+        if(Input.GetKeyDown(KeyCode.V)) {
+            Debug.Log("melee");
+        }
     }
-    
-    private void MeleeTarget(GameObject target) {
-
+    private void OnDrawGizmos() {
+        Gizmos.DrawWireSphere(melee.position, 0.5f);
     }
 
     #endregion
