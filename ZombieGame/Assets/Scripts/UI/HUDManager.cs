@@ -9,7 +9,6 @@ public class HUDManager : MonoBehaviour {
     private UseWeapon useWeapon;
     private Points playerPoints;
 
-    [SerializeField] private TextMeshProUGUI gunText;
     [SerializeField] private TextMeshProUGUI flairText;
     [SerializeField] private TextMeshProUGUI magText;
     [SerializeField] private TextMeshProUGUI ammoText;
@@ -17,6 +16,8 @@ public class HUDManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI transactionText;
     [SerializeField] private TextMeshProUGUI purchaseText;
     [SerializeField] private TextMeshProUGUI roundText;
+    [SerializeField] private TextMeshProUGUI instaKillText;
+    [SerializeField] private TextMeshProUGUI noAmmoText;
 
     [SerializeField] private GameObject crosshair;
 
@@ -49,7 +50,6 @@ public class HUDManager : MonoBehaviour {
     }
 
     void Update() {
-        gunText.text = useWeapon.primaryWeapon.WeaponName;
         flairText.text = useWeapon.primaryWeapon.Flair;
         magText.text = useWeapon.primaryWeapon.CurrentMag.ToString();
         ammoText.text = useWeapon.primaryWeapon.ReserveAmmo.ToString();
@@ -110,6 +110,20 @@ public class HUDManager : MonoBehaviour {
         }
         else {
             crosshair.SetActive(true);
+        }
+
+        if(useWeapon.instaKillTimer > 0) {
+            instaKillText.gameObject.SetActive(true);
+        }
+        else {
+            instaKillText.gameObject.SetActive(false);
+        }
+
+        if(useWeapon.primaryWeapon.CurrentMag.Equals(0) && useWeapon.primaryWeapon.ReserveAmmo.Equals(0)) {
+            noAmmoText.gameObject.SetActive(true);
+        }
+        else {
+            noAmmoText.gameObject.SetActive(false);
         }
     }
 

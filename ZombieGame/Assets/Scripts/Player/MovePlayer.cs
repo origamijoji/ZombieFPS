@@ -3,32 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MovePlayer : MonoBehaviour {
-    public Rigidbody rb;
-    public Transform orientation;
-    public float moveSpeed;
+
+    private float moveSpeed;
     public float walkSpeed;
     public float acceleration;
-    public float runSpeed = 8;
+    public float runSpeed;
     public float gravity;
+    public float groundCheckRadius;
     public float groundDrag = 7;
     public float airDrag;
+
+
+    public Transform feet;
+    public Rigidbody rb;
+    public Transform orientation;
+    public LayerMask whatIsGround;
 
     private Vector3 moveDir;
     private float xInput;
     private float zInput;
-    public bool isGrounded = true;
+    private bool isGrounded;
 
     private float zoomMultiplier;
     private float lockMultiplier;
 
     void Start() {
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update() {
         GetAxis();
         moveDir = xInput * orientation.right + zInput * orientation.forward;
-
+        CheckGround();
         ApplyMovement();
         DragControl();
         SprintControl();
@@ -43,7 +48,15 @@ public class MovePlayer : MonoBehaviour {
     }
 
     private void DragControl() {
-        rb.drag = groundDrag;
+        if (isGrounded) { rb.drag = groundDrag; }
+        else { rb.drag = airDrag; }
+    }
+
+    private void CheckGround() {
+        if (Physics.CheckSphere(feet.position, groundCheckRadius, whatIsGround)) {
+            isGrounded = true;
+        }
+        else { isGrounded = false; }
     }
     private void SprintControl() {
         if (Input.GetKey(KeyCode.LeftShift) && isGrounded) {
@@ -65,5 +78,9 @@ public class MovePlayer : MonoBehaviour {
     }
     public void UnZoom() {
         zoomMultiplier = 1;
+    }
+
+    private void OnDrawGizmos() {
+        Gizmos.DrawWireSphere(feet.position, groundCheckRadius);
     }
 }
