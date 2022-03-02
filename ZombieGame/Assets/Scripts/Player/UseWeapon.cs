@@ -54,7 +54,7 @@ public class UseWeapon : MonoBehaviour {
     public float meleeDamage;
     public float buyRange;
     private GiveGun buyZone;
-    public LayerMask playerMask;
+    public LayerMask ignoreMask;
     public LayerMask whatIsBuyZone;
     public LayerMask zombieLayer;
 
@@ -82,7 +82,7 @@ public class UseWeapon : MonoBehaviour {
     }
 
     private void Start() {
-        playerMask = ~playerMask;
+        ignoreMask = ~ignoreMask;
         primaryWeapon = new Pistol();
         secondaryWeapon = new None();
         weaponManager.SetActiveWeapon(primaryWeapon.WeaponName);
@@ -264,7 +264,7 @@ public class UseWeapon : MonoBehaviour {
                 //}
             }
 
-            if (Physics.Raycast(playerCamera.gameObject.transform.position, bulletDir, out RaycastHit hit, primaryWeapon.MaxRange, playerMask)) {
+            if (Physics.Raycast(playerCamera.gameObject.transform.position, bulletDir, out RaycastHit hit, primaryWeapon.MaxRange, ignoreMask)) {
 
                 if (hit.transform.gameObject.CompareTag("Zombie Head")) {
                     hitZombie = hit.collider.gameObject.GetComponentInParent<ZombieHealth>();
@@ -418,7 +418,6 @@ public class UseWeapon : MonoBehaviour {
 
     private void DoMelee() {
         if (Physics.SphereCast(melee.position, 0.5f, melee.forward, out RaycastHit hit, 0.5f, zombieLayer)) {
-            Debug.Log("zombie in range");
             if (Input.GetKeyDown(KeyCode.V)) {
                 Debug.Log("melee hit");
                 ZombieHealth zombie = hit.transform.gameObject.GetComponent<ZombieHealth>();

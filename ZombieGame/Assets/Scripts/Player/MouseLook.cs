@@ -36,6 +36,10 @@ public class MouseLook : MonoBehaviour {
     private void Awake() {
     }
 
+    private void Start() {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     private void Update() {
         mouseX = Input.GetAxisRaw("Mouse X");
         mouseY = Input.GetAxisRaw("Mouse Y");

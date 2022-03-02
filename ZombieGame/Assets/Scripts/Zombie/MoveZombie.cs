@@ -3,21 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MoveZombie : MonoBehaviour
-{
+public class MoveZombie : MonoBehaviour {
     public GameObject player;
     public RoundManager roundManager;
     public NavMeshAgent agent;
+
+    public double attackTimer;
+    public double attackSpeed;
+    public bool playerInRange;
     private void Awake() {
         agent = gameObject.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
         roundManager = RoundManager.instance;
     }
-    void Update()
-    {
+    private void OnEnable() {
+        agent.enabled = false;
+        agent.enabled = true;
+    }
+    void Update() {
         //transform.Translate(speed * Vector3.forward);
         agent.speed = roundManager.currentSpeed;
         agent.SetDestination(player.transform.position);
+
+
+        if(playerInRange) {
+            attackTimer += Time.deltaTime;
+
+        }
+        else { attackTimer = Mathf.Lerp((float) attackTimer, 0, Time.deltaTime); }
+
+        if (attackTimer > attackSpeed) {
+            PlayerHealth playerHit = player.GetComponent<PlayerHealth>();
+            playerHit.TakeDamage();
+            attackTimer = 0;
+        }
 
     }
 
@@ -25,10 +44,17 @@ public class MoveZombie : MonoBehaviour
         agent.speed = roundManager.currentSpeed;
     }
 
-    private void OnTriggerEnter(Collider collision) {
-        if(collision.gameObject.CompareTag("Player")) {
-            PlayerHealth playerHit = collision.gameObject.GetComponent<PlayerHealth>();
-            playerHit.TakeDamage(25f);
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Player")) {
+            playerInRange = true;
         }
     }
+
+    private void OnTriggerExit(Collider collision) {
+        if (collision.gameObject.CompareTag("Player")) {
+            playerInRange = false;
+        }
+    }
+
+
 }

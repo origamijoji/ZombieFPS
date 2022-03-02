@@ -28,7 +28,6 @@ public class MovePlayer : MonoBehaviour {
     private float lockMultiplier;
 
     void Start() {
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update() {
