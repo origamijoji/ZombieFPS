@@ -24,4 +24,11 @@ public class MoveZombie : MonoBehaviour
     private void UpdateStats() {
         agent.speed = roundManager.currentSpeed;
     }
+
+    private void OnTriggerEnter(Collider collision) {
+        if(collision.gameObject.CompareTag("Player")) {
+            PlayerHealth playerHit = collision.gameObject.GetComponent<PlayerHealth>();
+            playerHit.TakeDamage(25f);
+        }
+    }
 }

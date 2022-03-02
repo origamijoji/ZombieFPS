@@ -169,6 +169,9 @@ public class RoundManager : MonoBehaviour {
             currentPity = 0;
             int powerupType = Random.Range(1, powerups.Count + 1);
             Powerups powerup = powerups.Find(e => e.position.Equals(powerupType));
+            //if(powerup.active == true) {
+                //StartCoroutine(RerollPowerup(powerup));
+            //}
 
             if (powerupsLeft > 0 && powerup.active == false) {
 
@@ -186,6 +189,18 @@ public class RoundManager : MonoBehaviour {
         else { currentPity++; }
 
         return null;
+    }
+
+    IEnumerator RerollPowerup(Powerups powerup) {
+        int powerupType;
+        while (powerup.active == true) {
+            powerupType = Random.Range(1, powerups.Count + 1);
+            powerup = powerups.Find(e => e.position.Equals(powerupType));
+
+
+            yield return null;
+        }
+        yield break;
     }
 
     public void DisablePowerup(string powerupName) {
