@@ -7,12 +7,12 @@ by OrigamiJoji<br/>
 Weapons models by [Simon Mercuzot](https://assetstore.unity.com/packages/3d/props/guns/low-poly-weapons-vol-1-151980)
 
 ## Controls
-W - Move forward
-A - Move left
-S - Move back
-D - Move right
+W - Move forward<br/>
+A - Move left<br/>
+S - Move back<br/>
+D - Move right<br/>
 
-Left Mouse - Fire
-Right Mouse - Aim Down Sights
-E - Interact
-Q - Swap Weapons
+Left Mouse - Fire<br/>
+Right Mouse - Aim Down Sights<br/>
+E - Interact<br/>
+Q - Swap Weapons<br/>
