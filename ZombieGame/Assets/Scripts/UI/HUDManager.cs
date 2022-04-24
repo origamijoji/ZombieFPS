@@ -54,8 +54,8 @@ public class HUDManager : MonoBehaviour {
         magText.text = useWeapon.primaryWeapon.CurrentMag.ToString();
         ammoText.text = useWeapon.primaryWeapon.ReserveAmmo.ToString();
         pointText.text = playerPoints.currentPoints.ToString();
-        //transactionText.text = playerPoints.lastTransaction;
-        /*
+        transactionText.text = playerPoints.lastTransaction;
+
         if (useWeapon.reloadTimer > 0) {
             reloading.SetActive(true);
             reloadingSlider.maxValue = useWeapon.primaryWeapon.ReloadSpeed;
@@ -65,8 +65,7 @@ public class HUDManager : MonoBehaviour {
         else {
             reloading.SetActive(false);
         }
-        */
-        /*
+
         if (useWeapon.switchTimer > 0) {
             switching.SetActive(true);
             switchingSlider.maxValue = useWeapon.secondaryWeapon.DrawTime;
@@ -86,7 +85,7 @@ public class HUDManager : MonoBehaviour {
         else {
             chambering.SetActive(false);
         }
-        */
+
         if (useWeapon.interactTimer > 0 && useWeapon.isInteracting) {
             interacting.SetActive(true);
             interactingSlider.maxValue = useWeapon.interactTime;
@@ -112,26 +111,6 @@ public class HUDManager : MonoBehaviour {
         else {
             crosshair.SetActive(true);
         }
-<<<<<<< Updated upstream
-=======
-        /*
-        if(useWeapon.instaKillTimer > 0) {
-            instaKillText.gameObject.SetActive(true);
-        }
-        else {
-            instaKillText.gameObject.SetActive(false);
-        }
-        */
-        /*
-
-        if(useWeapon.primaryWeapon.CurrentMag.Equals(0) && useWeapon.primaryWeapon.ReserveAmmo.Equals(0)) {
-            noAmmoText.gameObject.SetActive(true);
-        }
-        else {
-            noAmmoText.gameObject.SetActive(false);
-        }
-        */
->>>>>>> Stashed changes
     }
 
 }
