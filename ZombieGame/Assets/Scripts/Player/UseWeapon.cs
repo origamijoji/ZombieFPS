@@ -8,14 +8,11 @@ public class UseWeapon : MonoBehaviour {
     /// <summary>
     /// Handles all actions a player may do using a weapon
     /// </summary>
-
-
-    #region Inspector Var
-    public string primary;
-    public string secondary;
-    public int currentMagazine;
-    public int reserveAmmo;
-    #endregion
+    public static UseWeapon _instance;
+    public static UseWeapon Instance
+    {
+        get => _instance;
+    }
 
     [HideInInspector]
     public Weapon primaryWeapon;
@@ -68,6 +65,7 @@ public class UseWeapon : MonoBehaviour {
     #region MonoBehaviour Awake(), Start()
 
     private void Awake() {
+        _instance = this;
         //local components
         movePlayer = gameObject.GetComponent<MovePlayer>();
         mouseLook = gameObject.GetComponent<MouseLook>();
@@ -87,37 +85,25 @@ public class UseWeapon : MonoBehaviour {
         secondaryWeapon = new None();
         weaponManager.SetActiveWeapon(primaryWeapon.WeaponName);
         canFire = true;
+        isInteracting = false;
     }
     #endregion
+
+    Coroutine OnZoomRoutine = null;
+
     #region MonoBehaviour Update()
     private void Update() {
         ProcessReload();
         Fire();
         SwitchWeapon();
-        ShowInspector();
         DoPurchase();
-        DoMelee();
+        //DoMelee();
 
-        if (isInteracting) {
-            mouseLook.LockMouseInput(true);
-            movePlayer.LockMovement(true);
-        }
-        else {
-            mouseLook.LockMouseInput(false);
-            movePlayer.LockMovement(false);
-        }
-
-        if (Input.GetMouseButton(1) && !isReloading) {
-            isZoomed = true;
-            mouseLook.ZoomWeapon(primaryWeapon.ZoomValue);
-            movePlayer.ZoomedIn(primaryWeapon.ZoomMoveSpeed);
-            weaponManager.currentAnimator.MoveToFace();
-        }
-        else {
-            isZoomed = false;
-            mouseLook.UnZoom();
-            movePlayer.UnZoom();
-            weaponManager.currentAnimator.MoveToHand();
+        if (Input.GetMouseButtonDown(1) && !isReloading) {
+            if(OnZoomRoutine == null)
+            {
+                OnZoomRoutine = StartCoroutine(OnZoom());
+            }
         }
 
         if (instaKillTimer > 0) {
@@ -125,19 +111,26 @@ public class UseWeapon : MonoBehaviour {
         }
     }
     #endregion
-    #region Inspector
-    /*
-     * This class has its own primary and secondary fields to store the currently used weapons names and ammo amounts (for ease of access)
-     * 
-     * DO NOT GET THESE CONFUSED WITH THE PRIMARY/SECONDARY WEAPON CLASSES VARIABLES OF SIMILAR NAMES
-     */
-    private void ShowInspector() {
-        primary = primaryWeapon.WeaponName;
-        secondary = secondaryWeapon.WeaponName;
-        currentMagazine = primaryWeapon.CurrentMag;
-        reserveAmmo = primaryWeapon.ReserveAmmo;
+
+
+    IEnumerator OnZoom()
+    {
+        isZoomed = true;
+        Crosshair.Disable();
+        mouseLook.ZoomWeapon(primaryWeapon.ZoomValue);
+        movePlayer.ZoomedIn(primaryWeapon.ZoomMoveSpeed);
+        weaponManager.currentAnimator.MoveToFace();
+        while (Input.GetMouseButton(1) && !isReloading)
+        {
+            yield return null;
+        }
+        isZoomed = false;
+        mouseLook.UnZoom();
+        movePlayer.UnZoom();
+        weaponManager.currentAnimator.MoveToHand();
+        Crosshair.Enable();
+        OnZoomRoutine = null;
     }
-    #endregion
     #region Reload
     /*
      * If player has ammo, is free from actions, doesn't currently have a full magazine, and has reserve ammo start a Reload
@@ -185,6 +178,7 @@ public class UseWeapon : MonoBehaviour {
                     isReloading = false;
                 }
             }
+            UpdateUI.Ammo();
         }
         else if (!primaryWeapon.ClipFed) {
             chamberTimer = primaryWeapon.ChamberTime;
@@ -196,8 +190,16 @@ public class UseWeapon : MonoBehaviour {
                 primaryWeapon.CurrentMag++;
                 primaryWeapon.ReserveAmmo--;
                 yield return null;
+                UpdateUI.Ammo();
             }
             isReloading = false;
+        }
+        if(Input.GetMouseButton(1))
+        {
+            if(OnZoomRoutine == null)
+            {
+                OnZoomRoutine = StartCoroutine(OnZoom());
+            }
         }
         yield break;
     }
@@ -225,6 +227,7 @@ public class UseWeapon : MonoBehaviour {
         secondaryWeapon = primaryWeapon;
         primaryWeapon = temp;
         isSwitching = false;
+        UpdateUI.Ammo();
         yield break;
     }
     #endregion
@@ -244,6 +247,7 @@ public class UseWeapon : MonoBehaviour {
     IEnumerator FireAllProjectiles() {
         canFire = false;
         primaryWeapon.CurrentMag--;
+        UpdateUI.Ammo();
         weaponManager.currentAnimator.Fire(primaryWeapon.FiringRate);
         mouseLook.Recoil(primaryWeapon.Recoil);
         ZombieHealth hitZombie;
@@ -280,12 +284,12 @@ public class UseWeapon : MonoBehaviour {
                     Quaternion rot = Quaternion.FromToRotation(Vector3.forward, hit.normal);
                     poolManager.SpawnFromPool(primaryWeapon.BulletHoleSize, hit.point, rot);
                 }
+                UpdateUI.Point();
             }
             yield return null;
         }
         yield return new WaitForSeconds(primaryWeapon.FiringRate);
         StartCoroutine(ResetTrigger());
-        yield break;
     }
 
     IEnumerator ResetTrigger() {
@@ -296,7 +300,6 @@ public class UseWeapon : MonoBehaviour {
             }
         }
         canFire = true;
-        yield break;
     }
 
 
@@ -379,7 +382,6 @@ public class UseWeapon : MonoBehaviour {
             yield break;
         }
         isInteracting = false;
-        yield break;
     }
 
     private void DecidePurchase() {
@@ -411,6 +413,8 @@ public class UseWeapon : MonoBehaviour {
                 secondaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
             }
         }
+        UpdateUI.Point();
+        UpdateUI.Ammo();
     }
 
     #endregion
@@ -444,6 +448,7 @@ public class UseWeapon : MonoBehaviour {
     private void MaxAmmo() {
         primaryWeapon.ReserveAmmo = primaryWeapon.MaxReserveAmmo;
         secondaryWeapon.ReserveAmmo = secondaryWeapon.MaxReserveAmmo;
+        UpdateUI.Ammo();
     }
 
     private void InstaKill() {

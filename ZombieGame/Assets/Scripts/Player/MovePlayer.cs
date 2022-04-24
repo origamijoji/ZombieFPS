@@ -24,10 +24,11 @@ public class MovePlayer : MonoBehaviour {
     private float zInput;
     private bool isGrounded;
 
-    private float zoomMultiplier;
-    private float lockMultiplier;
+    [SerializeField] private float zoomMultiplier;
+    [SerializeField] private float lockMultiplier;
 
     void Start() {
+        LockMovement(false);
     }
 
     void Update() {

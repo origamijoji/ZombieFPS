@@ -9,6 +9,16 @@ public class Points : MonoBehaviour
 
     public float transactionTimer;
     private float transactionTime = 1.5f;
+
+    private static Points _instance;
+    public static Points Instance
+    {
+        get => _instance;
+    }
+    private void Awake()
+    {
+        _instance = this;
+    }
     public void AddPoints(int value) {
         transactionTimer = transactionTime;
         currentPoints += value;

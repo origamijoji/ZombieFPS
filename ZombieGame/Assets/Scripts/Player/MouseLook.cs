@@ -18,8 +18,8 @@ public class MouseLook : MonoBehaviour {
     private float mouseX;
     private float mouseY;
 
-    private float lockValue;
-    private float zoomValue;
+    [SerializeField] private float lockValue;
+    [SerializeField] private float zoomValue;
     #endregion
     #region References
     [Header("~ References <3")]
@@ -38,6 +38,7 @@ public class MouseLook : MonoBehaviour {
 
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
+        LockMouseInput(false);
     }
 
     private void Update() {

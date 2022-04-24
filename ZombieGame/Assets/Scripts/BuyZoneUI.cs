@@ -11,7 +11,7 @@ public class BuyZoneUI : MonoBehaviour
         giveGun = gameObject.GetComponentInParent<GiveGun>();
     }
     private void Start() {
-        statsText.text = MagazineText() + AmmoText() + DamageText() + RPMText() + CritText() + WeightText();
+        statsText.text = MagazineText() + AmmoText() + DamageText() + RPMText() + CritText() + HintText();
     }
     public string RPMText () {
         return "RPM: " + giveGun.RPM + "\n";
@@ -30,5 +30,9 @@ public class BuyZoneUI : MonoBehaviour
     }
     public string AmmoText() {
         return "Ammo Capacity: " + giveGun.reserveAmmo + "\n";
+    }
+    public string HintText()
+    {
+        return giveGun.hint;
     }
 }

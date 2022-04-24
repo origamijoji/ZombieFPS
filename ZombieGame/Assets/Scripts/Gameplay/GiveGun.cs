@@ -31,6 +31,7 @@ public class GiveGun : MonoBehaviour {
     public float damage;
     public float critValue;
     public string weight;
+    public string hint;
 
     public Weapon thisWeapon;
 
@@ -44,6 +45,7 @@ public class GiveGun : MonoBehaviour {
         reserveAmmo = thisWeapon.ReserveAmmo;
         damage = thisWeapon.BulletDamage;
         critValue = thisWeapon.HeadshotMultiplier;
+        hint = "Hold 'E' To Purchase";
     }
 
     private void Awake() {

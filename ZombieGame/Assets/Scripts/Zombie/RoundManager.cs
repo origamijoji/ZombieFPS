@@ -144,6 +144,7 @@ public class RoundManager : MonoBehaviour {
         foreach (Powerups powerup in powerups) {
             powerup.active = false;
         }
+        UpdateUI.Round();
         StartCoroutine(SpawnHorde());
     }
 
