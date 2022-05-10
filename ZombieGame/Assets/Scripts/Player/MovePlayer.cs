@@ -35,11 +35,14 @@ public class MovePlayer : MonoBehaviour {
         GetAxis();
         moveDir = xInput * orientation.right + zInput * orientation.forward;
         CheckGround();
-        ApplyMovement();
         DragControl();
         SprintControl();
     }
 
+    private void FixedUpdate()
+    {
+        ApplyMovement();
+    }
     private void GetAxis() {
         xInput = Input.GetAxisRaw("Horizontal");
         zInput = Input.GetAxisRaw("Vertical");
